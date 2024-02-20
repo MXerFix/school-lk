@@ -7,6 +7,6 @@ export default defineConfig({
   plugins: [react(), TanStackRouterVite()],
   build:{
     outDir: '../backend/dist',
-    emptyOutDir: true
+    emptyOutDir: true,
   }
 })

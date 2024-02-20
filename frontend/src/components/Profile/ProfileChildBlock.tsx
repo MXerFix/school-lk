@@ -11,7 +11,7 @@ import { Info } from "lucide-react"
 import ModalCollapseTitle from "../../ui/ModalCollapseTitle"
 import toast, { Toaster } from "react-hot-toast"
 import { useChildCreate } from "../../hooks/child/useChildCreate"
-import { getAge } from "../../utils"
+import { getAge, validateAge, validateRussianPhoneNumber } from "../../utils"
 import { deepEqual } from "@tanstack/react-router"
 import { useChildMutate } from "../../hooks/child/useChildMutate"
 
@@ -118,6 +118,9 @@ const ProfileChildBlock = () => {
   const { mutateChildFn } = useChildMutate()
 
   const saveData = async () => {
+    if (!validateRussianPhoneNumber(tel) && tel) {
+      toast.error('Некорректный номер телефона', { id: 'check_phone' })
+    }
     if (!firstBlock || !img) {
       toast.error("Заполните все обязательные поля", {
         id: "check_fields",
@@ -147,8 +150,17 @@ const ProfileChildBlock = () => {
   }
 
   useEffect(() => {
-    if (name.length > 0 && surname.length > 0 && birthDate && gender && (img || child?.img)) {
-      setFirstBlock(true)
+    if (!validateAge(birthDate, 5, 7)) {
+      toast.error('Некорректная дата рождения', {
+        id: 'child_age_lower_warn'
+      })
+      setFirstBlock(false)
+    }
+  }, [birthDate])
+
+  useEffect(() => {
+    if (name.length > 0 && surname.length > 0 && birthDate && validateAge(birthDate, 5, 7) && gender && (img || child?.img)) {
+        setFirstBlock(true)
     } else {
       setFirstBlock(false)
     }
@@ -178,6 +190,7 @@ const ProfileChildBlock = () => {
   //     setInsurance((prev) => prev + " ")
   //   }
   // }, [insurance])
+  
 
   return (
     <ContentBlock

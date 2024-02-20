@@ -47,7 +47,7 @@ export function getAge(arg0: Date): React.ReactNode {
   return formatAge(age)
 }
 
-function validateAge(dateString: string, minAge: number): boolean {
+export function validateAge(dateString: string, minAge: number, maxAge: number): boolean {
   const birthDate = new Date(dateString);
   const today = new Date();
   let age = today.getFullYear() - birthDate.getFullYear();
@@ -57,7 +57,12 @@ function validateAge(dateString: string, minAge: number): boolean {
     age--;
   }
 
-  return age >= minAge;
+  return age >= minAge && age <= maxAge;
+}
+
+export function validateRussianPhoneNumber(phoneNumber) {
+  const regex = /^\+7\d{10}$/;
+  return regex.test(phoneNumber);
 }
 
 export function createFormData(

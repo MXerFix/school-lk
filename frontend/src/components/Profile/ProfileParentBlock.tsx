@@ -10,7 +10,7 @@ import ModalCollapseTitle from "../../ui/ModalCollapseTitle"
 import toast, { Toaster } from "react-hot-toast"
 import { Info } from "lucide-react"
 import { useParentCreate } from "../../hooks/parents/useParentCreate"
-import { deepEqual } from "../../utils"
+import { deepEqual, validateAge, validateRussianPhoneNumber } from "../../utils"
 import { useUserStore } from "../../store/store.user"
 
 type ProfileParentBlockType = {
@@ -156,8 +156,15 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
   const [secondBlock, setSecondBlock] = useState(false)
   const [thirdBlock, setThirdBlock] = useState(false)
 
+  // useEffect(() => {
+  //   if (Number(new Date(birthDate ?? "").getFullYear()) > 2007) {
+  //     setFirstBlock(false)
+  //     toast.error('Некорректная дата рождения')
+  //   }
+  // }, [birthDate])
+
   useEffect(() => {
-    if (name.length > 0 && surname.length > 0 && birthDate && gender) {
+    if (name.length > 0 && surname.length > 0 && birthDate && gender && validateAge(birthDate, 18, 99)) {
       setFirstBlock(true)
     } else {
       setFirstBlock(false)
@@ -174,7 +181,7 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
     // } else {
     //   setSecondBlock(false)
     // }
-    if (email.length > 5 && tel.length >= 12) {
+    if (email.length > 5 && tel.length === 12 && validateRussianPhoneNumber(tel)) {
       setThirdBlock(true)
     } else {
       setThirdBlock(false)
@@ -196,29 +203,36 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
   ])
 
   const saveData = async () => {
-    if (!firstBlock || !thirdBlock) {
-      toast.error("Заполните все обязательные поля", {
-        id: "check_fields",
-      })
+    if (!validateRussianPhoneNumber(tel)) {
+      toast.error('Некорректный номер телефона', { id: 'check_phone' })
+    }
+    if (!validateAge(birthDate, 18, 99)) {
+      return toast.error('Некорректная дата рождения', { id: 'parent_age_lower_warn' })
     } else {
-      const formData = new FormData()
-      formData.append("name", name)
-      formData.append("surname", surname)
-      formData.append("lastname", lastname)
-      formData.append("birthDate", birthDate)
-      formData.append("gender", gender)
-      formData.append("email", email)
-      formData.append("tel", tel)
-      formData.append("snils", snils)
-      // formData.append("passport_number", passport_number)
-      // formData.append("passport_series", passport_series)
-      // formData.append("passport_address", passport_address)
-      // formData.append("passport_addressDate", passport_addressDate)
-      // formData.append("passport_date", passport_date)
-      // formData.append("passport_department", passport_department)
-      // formData.append("passport_issuedBy", passport_issuedBy)
-      toast.loading("Сохранение...", { id: "check_parent_data" })
-      createParentFn()
+      if (!firstBlock || !thirdBlock) {
+        toast.error("Заполните все обязательные поля", {
+          id: "check_fields",
+        })
+      } else {
+        const formData = new FormData()
+        formData.append("name", name)
+        formData.append("surname", surname)
+        formData.append("lastname", lastname)
+        formData.append("birthDate", birthDate)
+        formData.append("gender", gender)
+        formData.append("email", email)
+        formData.append("tel", tel)
+        formData.append("snils", snils)
+        // formData.append("passport_number", passport_number)
+        // formData.append("passport_series", passport_series)
+        // formData.append("passport_address", passport_address)
+        // formData.append("passport_addressDate", passport_addressDate)
+        // formData.append("passport_date", passport_date)
+        // formData.append("passport_department", passport_department)
+        // formData.append("passport_issuedBy", passport_issuedBy)
+        toast.loading("Сохранение...", { id: "check_parent_data" })
+        createParentFn()
+      }
     }
   }
 
