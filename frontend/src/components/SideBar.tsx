@@ -58,7 +58,7 @@ const SideBar = () => {
           className={classNames(
             "sidebar-menu-item",
             // eslint-disable-next-line no-useless-escape
-            pathname === `/lk\/home\/?/` && "sidebar-menu-item-active"
+            pathname === `/lk/home\/?` && "sidebar-menu-item-active"
           )}>
           <Home className={"w-5 h-5"} />
           Главная
