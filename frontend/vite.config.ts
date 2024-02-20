@@ -6,7 +6,13 @@ import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
 export default defineConfig({
   plugins: [react(), TanStackRouterVite()],
   build:{
-    outDir: '../backend/dist',
-    emptyOutDir: true,
-  }
+    outDir: 'dist',
+    rollupOptions: {
+      output: {
+        assetFileNames: 'assets/[name]-[hash]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash]-[hash].js',
+      }
+    }
+  },
 })
