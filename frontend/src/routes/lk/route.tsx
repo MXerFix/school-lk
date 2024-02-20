@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { Outlet, createFileRoute, useNavigate, useRouterState } from "@tanstack/react-router"
 import SideBar from "../../components/SideBar"
 import { useEffect } from "react"
@@ -13,7 +14,7 @@ function Index() {
   const { pathname } = useRouterState().location
 
   useEffect(() => {
-    if (pathname === "/lk") {
+    if (pathname === "/lk\/?") {
       navigate({
         to: "/lk/home",
       })

@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { useMutation } from "@tanstack/react-query"
 import { UserLoginType } from "../../api/api"
 import { login, refresh } from "../../api/auth"
@@ -11,8 +12,8 @@ import { useFetchData } from "../useFetchData"
 export function useRefresh() {
   const { setUser, setIsLogin } = useUserStore()
   const navigate = useNavigate()
-  const auth_path = useRouterState().location.pathname === "/auth"
-  const reg_path = useRouterState().location.pathname === "/registration"
+  const auth_path = useRouterState().location.pathname === "/auth\/?"
+  const reg_path = useRouterState().location.pathname === "/registration\/?"
   const { pathname } = useRouterState().location
   const { fetchData } = useFetchData()
 

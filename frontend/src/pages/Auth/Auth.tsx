@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { useCallback, useEffect, useState } from "react"
 import AuthBgLeft from "../../assets/auth_bg_1"
 import AuthBgRight from "../../assets/auth_bg_2"
@@ -15,7 +16,7 @@ const Auth = () => {
   const { toggleTheme } = useThemeStore()
   const { pathname } = useRouterState().location
   const navigate = useNavigate()
-  const is_registration = pathname === "/registration"
+  const is_registration = pathname === "/registration\/?"
   // const [pending, setPending] = useState(false)
   // const [toast, setToast] = useState(false)
   // const [toastMessage, setToastMessage] = useState("")
