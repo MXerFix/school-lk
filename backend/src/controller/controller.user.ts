@@ -86,13 +86,23 @@ class UserController {
       })
       return res.json(userData)
     } catch (error) {
+      res.clearCookie('refresh_token').clearCookie('access_token')
       next(error)
     }
   }
 
   async activate(req: Request, res: Response, next: NextFunction) {
     try {
+      const { activation_link } = req.query
+      console.log(activation_link)
+      if (!activation_link) {
+        throw ApiError.BadRequest("Некорректная ссылка активации!", [])
+      }
+      const correct_link = activation_link.toString()
+      const user = await userService.activate(correct_link)
+      return res.redirect(process.env.CLIENT_URL + '/lk/home?activated=true')
     } catch (error) {
+      console.log(error)
       next(error)
     }
   }

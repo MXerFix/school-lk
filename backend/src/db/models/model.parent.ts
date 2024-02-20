@@ -60,9 +60,11 @@ Parent.init(
     },
     tel: {
       type: DataTypes.STRING,
+      unique: 'tel'
     },
     email: {
       type: DataTypes.STRING,
+      unique: "email"
     }
   },
   {
@@ -71,7 +73,5 @@ Parent.init(
   }
 )
 
-Parent.belongsTo(User, { foreignKey: "user_id" })
-Parent.belongsTo(Child, { foreignKey: "child_id" })
 
 export default Parent

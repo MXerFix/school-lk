@@ -4,10 +4,11 @@ import { UserDataLoginType } from "../api/api"
 
 
 interface UserStoreInterface {
-  user: UserDataLoginType
+  user: UserDataLoginType | null
   setUser: (user: UserDataLoginType) => void
   is_login: boolean
   setIsLogin: (value: boolean) => void
+  reset: () => void
 }
 
 export const initUser: UserDataLoginType = {
@@ -18,10 +19,16 @@ export const initUser: UserDataLoginType = {
   role_id: 3
 }
 
+const initialState = {
+  user: null,
+  is_login: false
+}
+
 
 export const useUserStore = create<UserStoreInterface>((set) => ({
-  user: initUser,
+  user: null,
   setUser: ( user: UserDataLoginType ) => set(() => ({ user: user })),
   is_login: false,
-  setIsLogin: (value: boolean) => set(() => ({ is_login: value }))
+  setIsLogin: (value: boolean) => set(() => ({ is_login: value })),
+  reset: () => set(initialState),
 }))

@@ -47,7 +47,7 @@ class TokenService {
 
   async validateAccessToken(token: string) {
     try {
-      const userData = jwt.verify(token, process.env.JWT_ACCESS)
+      const userData = jwt.verify(token, process.env.JWT_ACCESS) as UserDTO
       return userData
     } catch (error) {
       return null

@@ -19,6 +19,7 @@ Role.init(
     },
     name: {
       type: DataTypes.STRING,
+      unique: 'role_name'
     },
     permissions: {
       type: DataTypes.JSON,
@@ -29,6 +30,27 @@ Role.init(
     modelName: "role",
   } 
 )
+
+
+
+// Role.bulkCreate([
+//   {
+//     name: "root",
+//     permissions: ["root", "admin", "user", "teacher"]
+//   },
+//   {
+//     name: "admin",
+//     permissions: ["admin", "user", "teacher"]
+//   },
+//   {
+//     name: 'teacher',
+//     permissions: ["teacher", "user"]
+//   },
+//   {
+//     name: "user",
+//     permissions: ["user"]
+//   }
+// ])
 
 
 

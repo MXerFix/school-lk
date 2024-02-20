@@ -4,10 +4,12 @@ import ThemeToggler from "../ui/ThemeToggler"
 import { useNavigate } from "@tanstack/react-router"
 import { useLogout } from "../hooks/auth/useLogout"
 import { Transition } from "@headlessui/react"
+import { useUserStore } from "../store/store.user"
 
 const Header = () => {
   const navigate = useNavigate()
   const { LogOutFn } = useLogout()
+  const { user } = useUserStore()
 
   const [isAlertsOpen, setIsAlertsOpen] = useState(false)
 
@@ -20,15 +22,22 @@ const Header = () => {
 
   return (
     <div className='text-base-content flex flex-row items-center justify-between h-12 col-span-3 pointer-events-auto'>
-      <div>
+      <div className='flex items-center justify-start gap-4'>
         <div className='input transition focus-within:outline-none bg-base-200 flex items-center justify-between'>
           <input
             type='text'
-            placeholder='Search'
+            placeholder='В разработке...'
             className='bg-transparent h-full'
           />
           <Search />
         </div>
+        {!user?.is_verified && (
+          <div>
+            <span className='bg-yellow-400/50 h-12 rounded-lg px-2 text-sm w-max flex items-center justify-center'>
+              Пожалуйста, активируйте аккаунт по ссылке на электронной почте
+            </span>
+          </div>
+        )}
       </div>
       <div>
         <div className='flex items-center justify-between gap-16'>
@@ -42,7 +51,7 @@ const Header = () => {
               data-tip='Сообщения'>
               <Mail />
             </button>
-            <div className="relative">
+            <div className='relative'>
               <button
                 onClick={() => setIsAlertsOpen(!isAlertsOpen)}
                 className={` nav-icon-btn ${!isAlertsOpen && "tooltip"} ${isAlertsOpen && "bg-base-300"} tooltip-bottom`}
@@ -51,13 +60,15 @@ const Header = () => {
               </button>
               <Transition
                 className={
-                  "absolute top-[125%] right-0 z-10 transition origin-top-right duration-100 ease-in bg-base-200 rounded-xl border w-96 h-96"
+                  "absolute top-[125%] right-0 z-10 transition origin-top-right duration-100 ease-in bg-base-200 rounded-xl border w-96 h-96 flex items-center justify-center"
                 }
                 show={isAlertsOpen}
                 enterFrom='transform scale-50 opacity-0'
                 enterTo='transform scale-100 opacity-100'
                 leaveFrom='transform scale-100 opacity-100'
-                leaveTo='transform scale-50 opacity-0'></Transition>
+                leaveTo='transform scale-50 opacity-0'>
+                  В разработке...
+                </Transition>
             </div>
           </div>
           <div className='flex items-center justify-end'>

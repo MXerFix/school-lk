@@ -62,6 +62,11 @@ type ParentStoreType = {
   setParents: (parents: ParentType[]) => void
   addParent: (parent: ParentType) => void
   deleteParent: (parent: ParentType) => void
+  reset: () => void
+}
+
+const initialState = {
+  parents: []
 }
 
 export const useParentsStore = create<ParentStoreType>((set) => ({
@@ -70,4 +75,5 @@ export const useParentsStore = create<ParentStoreType>((set) => ({
   addParent: (parent) => set((state) => ({ parents: [...state.parents, parent] })),
   deleteParent: (parent) =>
     set((state) => ({ parents: [...state.parents.filter((p) => p.id !== parent.id)] })),
+    reset: () => set(initialState),
 }))

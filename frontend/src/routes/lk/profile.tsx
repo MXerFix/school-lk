@@ -28,11 +28,11 @@ const Profile = () => {
         <div className='flex flex-col items-start justify-start gap-2'>
           <ProfileInfoItem
             title='Email'
-            value={user.email}
+            value={user?.email ?? "Не указан"}
           />
           <ProfileInfoItem
             title='Основной номер телефона'
-            value={"+79991112233"}
+            value={user?.tel ?? "Не указан"}
           />
           <div></div>
         </div>

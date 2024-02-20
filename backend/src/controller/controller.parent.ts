@@ -17,7 +17,7 @@ class ParentController {
         !parent_data.surname ||
         !parent_data.birthDate ||
         !parent_data.gender ||
-        !parent_data.snils ||
+        // !parent_data.snils ||
         !parent_data.email ||
         !parent_data.tel
       ) {
@@ -29,21 +29,21 @@ class ParentController {
         )
       }
       const passport = JSON.stringify({
-        series: parent_data.passport_series,
-        number: parent_data.passport_number,
-        issue_date: parent_data.passport_date,
-        issued_by: parent_data.passport_issuedBy,
-        department: parent_data.passport_department,
-        address: parent_data.passport_address,
-        address_date: parent_data.passport_addressDate,
+        series: parent_data.passport_series ?? "",
+        number: parent_data.passport_number ?? "",
+        issue_date: parent_data.passport_date ?? "",
+        issued_by: parent_data.passport_issuedBy ?? "",
+        department: parent_data.passport_department ?? "",
+        address: parent_data.passport_address ?? "",
+        address_date: parent_data.passport_addressDate ?? "",
       })
       const _user = await User.findByPk<Model<UserType>>(user.id)
       if (!_user) {
         return next(ApiError.BadRequest("Пользователя с таким id не существует!", []))
       }
-      const _child = await User.findOne<Model<ChildType>>({
+      const _child = await Child.findOne<Model<ChildType>>({
         where: {
-          id: _user.dataValues.id,
+          user_id: _user.dataValues.id,
         },
       })
       if (!_child) {
@@ -80,8 +80,8 @@ class ParentController {
         lastname: parent_data.lastname,
         birthDate: parent_data.birthDate,
         gender: parent_data.gender,
-        passport: passport,
-        snils: parent_data.snils,
+        // passport: passport,
+        // snils: parent_data.snils,
         email: parent_data.email,
         tel: parent_data.tel,
         relation_type: parent_data.gender === "female" ? "mother" : "father",
@@ -108,20 +108,20 @@ class ParentController {
       const user: UserDTO = req["user"]
       const _user = await User.findByPk<Model<UserType>>(user.id)
       if (!user) {
-        return ApiError.BadRequest("Пользователя с таким id не существует!", [])
+        throw ApiError.BadRequest("Пользователя с таким id не существует!", [])
       }
       const parents = await Parent.findAll<Model<ParentType>>({
         where: {
           user_id: _user.dataValues.id,
         },
       })
-      if (!parents) {
-        return ApiError.BadRequest("Родители не найдены!", [])
+      if (!parents.length) {
+        return res.json({ message: "Данные о родителях не получены", parents: [] })
       }
-      setTimeout(() => {
-        return res.json({ message: "Данные о родителе успешно получены", parents })
-      }, 2000)
+
+      return res.json({ message: "Данные о родителе успешно получены", parents })
     } catch (error) {
+      console.log(error)
       next(error)
     }
   }

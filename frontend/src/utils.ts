@@ -50,7 +50,7 @@ export function getAge(arg0: Date): React.ReactNode {
 function validateAge(dateString: string, minAge: number): boolean {
   const birthDate = new Date(dateString);
   const today = new Date();
-  const age = today.getFullYear() - birthDate.getFullYear();
+  let age = today.getFullYear() - birthDate.getFullYear();
   const monthDiff = today.getMonth() - birthDate.getMonth();
   
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
@@ -58,4 +58,23 @@ function validateAge(dateString: string, minAge: number): boolean {
   }
 
   return age >= minAge;
+}
+
+export function createFormData(
+  file: File,
+  name: string,
+  type: string,
+  required: string,
+  step_index: string,
+  tags: string[]
+) {
+  if (!file) return null
+  const formData = new FormData()
+  formData.append("file", file)
+  formData.append("name", name)
+  formData.append("type", type)
+  formData.append("required", required)
+  formData.append("step_index", step_index)
+  formData.append("tags", JSON.stringify(tags))
+  return formData
 }

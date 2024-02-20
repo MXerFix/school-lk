@@ -7,6 +7,8 @@ import { Model } from "sequelize"
 import createUserDTO from "src/helper/createUserDTO"
 import ApiError from "src/error/error"
 import serviceToken from "./service.token"
+import Admission from "src/db/models/model.admission"
+import serviceAdmission from "./service.admission"
 
 class UserService {
   async signIn(email: string, password: string) {
@@ -16,19 +18,23 @@ class UserService {
     }
     const activation_link = v4()
     const hashed_password = await bcrypt.hash(password, 3)
-    const user: User = await User.create({
+    const user: Model<User> = await User.create({
       email,
       hashed_password,
       username: email,
       activation_link,
       is_verified: false,
+      role_id: 4,
     })
+    
     if (user) {
-      // await serviceMail.sendActivationMail(user.dataValues.email, user.dataValues.activation_link)
+      const admission = await serviceAdmission.create(user.dataValues.id)
+      await serviceMail.sendActivationMail(user.dataValues.email, user.dataValues.activation_link)
       const user_payload = await createUserDTO(user)
       return user_payload
     }
   }
+  
 
   async login(email: string, password: string) {
     const candidate = await User.findOne({ where: { email } })
@@ -61,6 +67,19 @@ class UserService {
     const user = await User.findByPk(userData.id)
     const user_payload = await createUserDTO(user)
     return user_payload
+  }
+
+  async activate(activation_link: string | string[]) {
+    const user = await User.findOne({ where: { activation_link } })
+    if (!user) {
+      throw ApiError.BadRequest("Некорректная ссылка активации!", [])
+    }
+    user.set({
+      is_verified: true,
+      activation_link: '',
+    })
+    await user.save()
+    return user
   }
 
 }

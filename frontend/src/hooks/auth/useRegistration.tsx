@@ -7,11 +7,13 @@ import { useUserStore } from "../../store/store.user"
 import { useNavigate } from "@tanstack/react-router"
 import toast from "react-hot-toast"
 import { RequestValidationError } from "./useLogin"
+import { useFetchData } from "../useFetchData"
 
 export function useRegistration({ email, password }: { email: string; password: string }) {
 
   const { setUser, setIsLogin } = useUserStore()
   const navigate = useNavigate()
+  const { fetchData } = useFetchData()
 
   const {
     mutate: SignUpFn,

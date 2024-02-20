@@ -17,11 +17,10 @@ class MailService {
     await this.transporter.sendMail({
       from: 'xajlonefpemob@gmail.com',
       to,
-      subject: 'Test',
+      subject: 'Активация аккаунта в личном кабинете JFTL',
       html: `
       <div>
-      <h1> TEST </h1>
-      <a href="http://localhost:5000/api/v1/user/activate/${link}"> link </a>
+      <h1> Для активации аккаунта перейдите по <a href="${process.env.API_URL}/api/v1/activate?activation_link=${link}">ссылке</a> </h1>
       </div>
       `
     })

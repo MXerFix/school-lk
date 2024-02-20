@@ -1,4 +1,3 @@
-
 export type UserType = {
   id: number
   uuid: string
@@ -6,11 +5,13 @@ export type UserType = {
   hashed_password: string
   email: string
   is_verified: boolean
+  tel?: string
   profile_img?: string
   activation_link?: string
   role_id: number
   child?: ChildType
   parents?: ParentType[]
+  admission?: AdmissionType
 }
 
 export type PersonType = {
@@ -70,55 +71,80 @@ export interface ParentCreateType {
   passport_addressDate: string
 }
 
+export type AdmissionStepStatusType = "success" | "failed" | "pending" | "initial" | "closed" | "incorrect"
+
+export type AdmissionStepType = {
+  id: number
+  status: AdmissionStepStatusType
+  title: string
+}
+
+interface AdmissionStep_1 extends AdmissionStepType {
+  documents: string
+}
+
+interface AdmissionStep_2 extends AdmissionStepType {
+  checkout: string
+  is_payed: boolean
+}
+
+interface AdmissionStep_3 extends AdmissionStepType {
+  part_1: string
+  part_2: string
+  part_3: string
+}
+
+interface AdmissionExamInterface {
+  id: number
+  name: string
+  description: string
+  date: string
+  time: string
+  class: string
+  status: AdmissionStepStatusType
+  comments?: string
+  points?: number
+  max_points?: number
+  min_points?: number
+  exercises?: string
+}
+
+interface AdmissionStep_4 extends AdmissionStepType {
+  documents: string
+}
+
+interface AdmissionStep_5 extends AdmissionStepType {
+  checkout: string
+  is_payed: boolean
+}
+
 export type AdmissionType = {
   id: number
   user_id: number
-  step_1: {
-    is_complete: boolean
-    is_pending: boolean
-    documents: string[]
-  }
-  step_2: {
-    is_complete: boolean
-    is_pending: boolean
-    payment: string
-    payment_status: "paid" | "not_paid" | "pending"
-  }
-  step_3: {
-    is_complete: boolean
-    is_pending: boolean
-    interview_completed: number
-    interview_index: number
-    meta: {
-      interview_1: {
-        is_complete: boolean
-        is_pending: boolean
-        qr: string
-      }
-      interview_2: {
-        is_complete: boolean
-        is_pending: boolean
-        qr: string
-      }
-      interview_3: {
-        is_complete: boolean
-        is_pending: boolean
-        qr: string
-      }
-    }
-  }
-  step_4: {
-    is_complete: boolean
-    is_pending: boolean
-    documents: string[]
-  }
-  step_5: {
-    is_complete: boolean
-    is_pending: boolean
-    payment: string
-    payment_status: "paid" | "not_paid" | "pending"
-  }
+  status: AdmissionStepStatusType
+  step: number
+  step_statuses: AdmissionStepStatusType[]
 }
+
+export type DocumentTagType =
+  | "passport"
+  | "parent_passport"
+  | "child_passport"
+  | "snils"
+  | "parent_snils"
+  | "child_snils"
+  | "additions"
+  | "parent_surname_change"
+  | "large_family_document"
+  | "child_disability_document"
+  | "svo_document"
+  | "consent"
+  | "consent_personal_data"
+  | "consent_psych_diagnosis"
+  | "consent_exams"
+  | "parent"
+  | "child"
+  | "checkout"
 
 export type SectionType = {
   id: number

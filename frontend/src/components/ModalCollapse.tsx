@@ -19,10 +19,12 @@ const ModalCollapse = ({
   cols = 2,
   rows = 3,
   flow = "column",
-  defaultOpen = true,
+  defaultOpen = false,
   name="modal-collapse",
   className
 }: ModalCollapseType) => {
+
+  
   return (
     <div className={classNames('collapse collapse-arrow bg-base-100 max-h-fit', className)}>
       <input

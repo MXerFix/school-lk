@@ -6,3 +6,5 @@ export const ADMIN_ROLE = 2
 export const USER_ROLE = 3
 
 export const gender_names = ['Мужчина', 'Женщина']
+
+export const admission_steps = [0, 1, 2, 3, 4, 5]

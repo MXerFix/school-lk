@@ -3,13 +3,15 @@ import { NextFunction, Request, Response } from "express"
 import { Model } from "sequelize"
 import Child from "src/db/models/model.child"
 import User from "src/db/models/model.user"
-import { ChildType, UserType } from "src/db/models/models.types"
+import { AdmissionStepType, ChildType, UserType } from "src/db/models/models.types"
 import ApiError from "src/error/error"
 import UserDTO from "src/dto/dto.user"
 import { v4 } from "uuid"
 import { pathToFileURL } from "bun"
 import path from "path"
 import { unlink } from "node:fs/promises"
+import Step from "src/db/models/model.step"
+import Admission from "src/db/models/model.admission"
 
 class ChildController {
   async create(req: Request, res: Response, next: NextFunction) {
@@ -32,17 +34,17 @@ class ChildController {
       img.mv(path.resolve(__dirname, "../../static/img", file_name))
 
       const user: UserDTO = req["user"]
-      if (!name || !surname || !birthDate || !gender || !passport || !insurance || !img) {
-        return next(
-          ApiError.BadRequest(
-            "Некорректные данные ребенка! Одно из обязательных полей не заполнено!",
-            []
-          )
+      if (!name || !surname || !birthDate || !gender || !img) {
+        throw ApiError.BadRequest(
+          "Некорректные данные ребенка! Одно из обязательных полей не заполнено!",
+          []
         )
       }
-      const _user = await User.findByPk<Model<UserType>>(user.id)
+      const _user = await User.findByPk<Model<UserType>>(user.id, {
+        include: [Admission],
+      })
       if (!user) {
-        return next(ApiError.BadRequest("Пользователя с таким id не существует!", []))
+        throw ApiError.BadRequest("Пользователя с таким id не существует!", [])
       }
       const _child = await Child.findOne<Model<ChildType>>({
         where: {
@@ -50,7 +52,7 @@ class ChildController {
         },
       })
       if (_child) {
-        return next(ApiError.BadRequest("У пользователя уже есть ребенок!", []))
+        throw ApiError.BadRequest("У пользователя уже есть ребенок!", [])
       }
       const child = await Child.create<Model<ChildType>>({
         name,
@@ -58,8 +60,6 @@ class ChildController {
         lastname: lastname ?? "",
         birthDate,
         gender,
-        passport,
-        insurance,
         citizenship: citizenship ?? "РФ",
         is_enrollee: false,
         is_student: false,
@@ -68,8 +68,31 @@ class ChildController {
         tel: tel ?? "",
         img: file_name,
       })
-      return res.json({ message: "Данные о ребенке успешно добавлены!", child })
+      const admission_id = _user.dataValues.admission.id
+      if (!admission_id) {
+        throw ApiError.BadRequest("Неизвестная ошибка при нахождении поступающего!", [])
+      }
+      const step: Step = await Step.create({
+        name: "Приветствие",
+        title: "",
+        description: "",
+        status: "initial",
+        step_index: 0,
+        admission_id,
+      })
+      const admission: Model<Admission> = await Admission.findByPk<Model<Admission>>(admission_id, {
+        include: [Step],
+      })
+      if (!admission) {
+        throw ApiError.BadRequest("Неизвестная ошибка при нахождении поступающего!", [])
+      }
+      admission.set({
+        step: step.dataValues.step_index,
+      })
+      admission.save()
+      return res.json({ message: "Данные о ребенке успешно добавлены!", child, admission, step })
     } catch (error) {
+      console.log(error)
       next(error)
     }
   }
@@ -79,7 +102,7 @@ class ChildController {
       const user: UserDTO = req["user"]
       const _user = await User.findByPk<Model<UserType>>(user.id)
       if (!user) {
-        return next(ApiError.BadRequest("Пользователя с таким id не существует!", []))
+        throw ApiError.BadRequest("Пользователя с таким id не существует!", [])
       }
       const child = await Child.findOne<Model<ChildType>>({
         where: {
@@ -87,10 +110,11 @@ class ChildController {
         },
       })
       if (!child) {
-        return next(ApiError.BadRequest("Ребенок не найден!", []))
+        res.json({ message: "Данные о ребенке не получены", child: null })
       }
       return res.json({ message: "Данные о ребенке успешно получены", child })
     } catch (error) {
+      console.log(error)
       next(error)
     }
   }
@@ -116,7 +140,9 @@ class ChildController {
       const userData: UserDTO = req["user"]
 
       // @ts-ignore
-      const { img } = req.files // Assuming img is the field for the updated image
+      const files = req.files // Assuming img is the field for the updated image
+      console.log(files)
+      const img = files.img
       const file_name = v4() + "." + img.mimetype.split("/")[1]
       img.mv(path.resolve(__dirname, "../../static/img", file_name))
 

@@ -4,12 +4,17 @@ import { Coins, Home, Lock, Palette, ScrollText, TestTube2, User } from "lucide-
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router"
 import classNames from "classnames"
 import { useChildStore } from "../store/store.child"
+import { useAdmissionStore } from "../store/store.admission"
+import toast from "react-hot-toast"
 
 const SideBar = () => {
   const { user } = useUserStore()
   const { child } = useChildStore()
   const navigate = useNavigate()
   const { pathname } = useRouterState().location
+  const { activeStep } = useAdmissionStore()
+
+  console.log(activeStep)
 
   const navigateToProfileHandler = () => {
     return navigate({
@@ -18,12 +23,12 @@ const SideBar = () => {
   }
 
   return (
-    <div className='sidebar row-span-12 w-full h-auto rounded-3xl pointer-events-auto p-4'>
+    <div className='sidebar row-span-12 w-full h-auto rounded-3xl pointer-events-auto p-4 content-block-shadow'>
       <button
         onClick={navigateToProfileHandler}
         className='sidebar-profile flex items-center justify-start gap-2 max-w-full w-full rounded-2xl px-1 py-2 mb-16 transition border border-transparent hover:border-base-100'>
         <div className='sidebar-profile-avatar bg-base-200 min-w-20 w-20 h-20 rounded-full flex items-center justify-center overflow-hidden'>
-          {user.profile_img ? (
+          {user?.profile_img ? (
             <img
               className="profile-img"
               src={`${import.meta.env.VITE_API_URL}/static/img/${user.profile_img}`}
@@ -43,7 +48,7 @@ const SideBar = () => {
           {" "}
           {/* {user.username.slice(0, 16)}
           {user.username.slice(0, 16) !== user.username && "..."}{" "} */}
-          {user.username.split('@')[0]}
+          {user?.username.split('@')[0]}
         </p>
       </button>
       <div className='sidebar-menu flex flex-col items-start justify-start gap-2'>
@@ -57,7 +62,11 @@ const SideBar = () => {
           Главная
         </Link>
         <Link
-          to='/lk/admission'
+          to={activeStep === -1 ? "/lk/profile" : "/lk/admission"}
+          onClick={() => activeStep === -1 && toast.error("Заполните анкету ребенка")}
+          search={{
+            step: activeStep > -1 ? activeStep : null ,
+          }}
           className={classNames(
             "sidebar-menu-item",
             pathname === "/lk/admission" && "sidebar-menu-item-active"
@@ -98,7 +107,7 @@ const SideBar = () => {
           <Coins className='w-5 h-5' />
           <p className="tooltip tooltip-bottom tooltip-warning" data-tip="В разработке..."> Оплата </p>
         </Link>
-        {user.role_id < 3 && (
+        {user?.role_id && user?.role_id < 3 && (
           <Link
             to='/admin'
             className={classNames(

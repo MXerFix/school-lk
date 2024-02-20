@@ -8,6 +8,7 @@ class UserDTO {
   is_verified: boolean
   role_id: number
   profile_img: string
+  tel: string
 
   constructor(model: UserType) {
     this.username = model.username
@@ -16,6 +17,7 @@ class UserDTO {
     this.is_verified = model.is_verified
     this.role_id = model.role_id
     this.profile_img = model.profile_img
+    this.tel = model.tel
   }
 }
 

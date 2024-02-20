@@ -23,7 +23,7 @@ const LabelRadio = ({
 
   
   
-  const id = useId()
+  const id = Math.random().toString(36).slice(2)
 
   return (
     <div
@@ -39,9 +39,9 @@ const LabelRadio = ({
           <label className='label cursor-pointer flex items-center gap-1.5'>
             <span className='label-text'> {options[0]} </span>
             <input
-              defaultChecked={value === values[0]}
+              checked={value === values[0]}
               type='radio'
-              name={`radio-${id}`}
+              name={id}
               className='radio checked:bg-success'
               onClick={() => setValue && setValue(values[0])}
             />
@@ -51,9 +51,9 @@ const LabelRadio = ({
           <label className='label cursor-pointer flex items-center gap-1.5'>
             <span className='label-text'> {options[1]} </span>
             <input
-              defaultChecked={value === values[1]}
+              checked={value === values[1]}
               type='radio'
-              name={`radio-${id}`}
+              name={id}
               className='radio checked:bg-success'
               onClick={() => setValue && setValue(values[1])}
             />

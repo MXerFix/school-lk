@@ -4,6 +4,7 @@ export type UserDataLoginType = {
   id: number
   is_verified: boolean
   role_id: number
+  tel?: string
   profile_img?: string
 }
 

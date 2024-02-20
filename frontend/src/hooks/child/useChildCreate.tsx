@@ -8,15 +8,17 @@ import { useNavigate } from "@tanstack/react-router"
 import toast from "react-hot-toast"
 import { create_child } from "../../api/child"
 import { ChildCreateResponseType, ChildCreateType, useChildStore } from "../../store/store.child"
+import { useAdmissionStore } from "../../store/store.admission"
 
 export type RequestValidationError = {
   message: string
   errors: []
 }
 
-export function useChildCreate(child: ChildCreateType) {
+export function useChildCreate() {
   
   const { setChild } = useChildStore()
+  const { setActiveStep, setAdmission } = useAdmissionStore()
 
   const {
     mutate: createChildFn,
@@ -24,9 +26,11 @@ export function useChildCreate(child: ChildCreateType) {
     isSuccess,
     data,
   } = useMutation({
-    mutationFn: () => create_child(child),
+    mutationFn: (formData: FormData) => create_child(formData),
     onSuccess: ({ data }: { data: ChildCreateResponseType }) => {
       setChild(data.child)
+      setAdmission(data.admission)
+      setActiveStep(data.step.step_index)
       toast.dismiss('check_child_data')
       toast.success("Данные успешно сохранены")
     },

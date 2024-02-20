@@ -114,23 +114,11 @@ const ProfileChildBlock = () => {
   const [secondBlock, setSecondBlock] = useState(false)
   const [thirdBlock, setThirdBlock] = useState(false)
 
-  const { createChildFn } = useChildCreate({
-    name,
-    surname,
-    lastname,
-    birthDate,
-    gender,
-    passport,
-    insurance,
-    email,
-    tel,
-    img: img ?? new File([], ""),
-  })
-
+  const { createChildFn } = useChildCreate()
   const { mutateChildFn } = useChildMutate()
 
   const saveData = async () => {
-    if (!firstBlock || !secondBlock || !img) {
+    if (!firstBlock || !img) {
       toast.error("Заполните все обязательные поля", {
         id: "check_fields",
       })
@@ -153,30 +141,43 @@ const ProfileChildBlock = () => {
         console.log("mutate")
       } else {
         console.log("create")
-        createChildFn()
+        createChildFn(formData)
       }
     }
   }
 
   useEffect(() => {
-    if (name.length > 0 && surname.length > 0 && birthDate && gender && img) {
+    if (name.length > 0 && surname.length > 0 && birthDate && gender && (img || child?.img)) {
       setFirstBlock(true)
     } else {
       setFirstBlock(false)
     }
-    if (passport.length === 6 && insurance.length === 16) {
-      setSecondBlock(true)
-    } else {
-      setSecondBlock(false)
-    }
+    // if (passport.length === 13 && insurance.length === 14) {
+    //   setSecondBlock(true)
+    // } else {
+    //   setSecondBlock(false)
+    // }
     if (email.length > 5 && tel.length >= 12) {
       setThirdBlock(true)
     } else {
       setThirdBlock(false)
     }
-  }, [birthDate, email, gender, img, insurance, name, passport, surname, tel])
+  }, [birthDate, child?.img, email, gender, img, insurance, name, passport, surname, tel])
 
-  console.log(img)
+  // useEffect(() => {
+  //   if (passport.length === 2) {
+  //     setPassport((prev) => prev + "-")
+  //   }
+  //   if (passport.length === 5) {
+  //     setPassport((prev) => prev + " №")
+  //   }
+  // }, [passport])
+
+  // useEffect(() => {
+  //   if (insurance.length === 3 || insurance.length === 7 || insurance.length === 11) {
+  //     setInsurance((prev) => prev + " ")
+  //   }
+  // }, [insurance])
 
   return (
     <ContentBlock
@@ -186,9 +187,8 @@ const ProfileChildBlock = () => {
       {child ? (
         <div className='text-2xl flex flex-col gap-2'>
           <p className='flex items-center person-item-info'>
-            <span>
-              {child.surname} {child.name} {child.lastname}
-            </span>
+            <span> ФИО:</span>
+            {child.surname} {child.name} {child.lastname}
           </p>
           <p className='person-item-info'>
             <span> Дата рождения:</span>
@@ -200,7 +200,9 @@ const ProfileChildBlock = () => {
           </p>
           <p className='person-item-info'>
             <span> Возраст:</span>
-            {child.birthDate ? getAge(new Date(child.birthDate)) : "Неизвестно"}
+            <p className='text-primary'>
+              {child.birthDate ? getAge(new Date(child.birthDate)) : "Неизвестно"}
+            </p>
           </p>
           <div className='text-base absolute top-8 right-8 bg-base-neutral w-32 h-32 rounded-full flex items-center justify-center sidebar-profile-avatar'>
             {child.img ? (
@@ -229,7 +231,7 @@ const ProfileChildBlock = () => {
           <div className='absolute w-full h-full top-0 left-0 flex items-center justify-center bg-transparent rounded-3xl'>
             <button
               onClick={openModal}
-              className='btn btn-primary'>
+              className='btn btn-primary text-white'>
               {" "}
               Заполнить анкету ученика{" "}
             </button>
@@ -262,7 +264,7 @@ const ProfileChildBlock = () => {
             <button className='btn btn-sm rounded-xl btn-ghost absolute right-2 top-2'>✕</button>
           </form>
           <div>
-            <h3 className='text-3xl font-bold mb-6'> Анкета ученика </h3>
+            <h3 className='text-3xl font-semibold mb-6 uppercase'> Анкета ученика </h3>
           </div>
           <div>
             <div className='flex flex-col items-start justify-start gap-2.5 h-[52vh]'>
@@ -331,6 +333,7 @@ const ProfileChildBlock = () => {
                     </p>
                   </label>
                   <input
+                    accept='image/webp, image/jpeg'
                     id='child-img-input'
                     onChange={(e) => setImg(e.target.files?.[0])}
                     type='file'
@@ -338,7 +341,7 @@ const ProfileChildBlock = () => {
                   />
                 </div>
               </ModalCollapse>
-              <ModalCollapse
+              {/* <ModalCollapse
                 className='bg-base-200'
                 name='Child-info'
                 title={<ModalCollapseTitle isCompleted={secondBlock}>Документы</ModalCollapseTitle>}
@@ -348,8 +351,8 @@ const ProfileChildBlock = () => {
                 defaultOpen={false}>
                 <LabelInput
                   // ref={passportRef}
-                  min={6}
-                  max={6}
+                  min={13}
+                  max={13}
                   required
                   label='Свидетельство о рождении*'
                   value={passport}
@@ -359,8 +362,8 @@ const ProfileChildBlock = () => {
                 />
                 <LabelInput
                   // ref={insuranceRef}
-                  min={16}
-                  max={16}
+                  min={14}
+                  max={14}
                   required
                   label='СНИЛС*'
                   value={insurance}
@@ -368,7 +371,7 @@ const ProfileChildBlock = () => {
                   type='text'
                   placeholder='000 000 000 00'
                 />
-              </ModalCollapse>
+              </ModalCollapse> */}
               <ModalCollapse
                 className='bg-base-200'
                 name='Child-info'
@@ -408,6 +411,10 @@ const ProfileChildBlock = () => {
                 />
               </ModalCollapse>
             </div>
+            <span className='text-sm text-primary flex w-full items-center justify-center mb-4'>
+              {" "}
+              Вводите данные корректно, от этого напрямую зависит успешность поступления!{" "}
+            </span>
             <div className='flex items-center justify-between'>
               <div>
                 <button

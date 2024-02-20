@@ -41,6 +41,7 @@
     --card-test: #fff;
     --skeleton-background: #bebebe;
     --base-neutral: #F2F2FA ;  
+    --button-file: #fff;
   }
 
   [data-theme="dark"] {
@@ -48,6 +49,7 @@
     --card-test: #333;
     --skeleton-background: #31363d;
     --base-neutral: #F2F2FA50 ; 
+    --button-file: #F2F2FA50;
   }
 
 }
@@ -113,6 +115,10 @@
   box-shadow: 0 6px 20px 0 #f0f0ff;
 }
 
+[data-theme="light"] .content-block-shadow {
+  box-shadow: 0 6px 20px 0 #f0f0ff;
+}
+
 [data-theme="dark"] .home-content-block {
   box-shadow: none;
 }
@@ -131,7 +137,7 @@
 }
 
 .person-item-info {
-  @apply flex items-center gap-2
+  @apply flex items-center gap-2 max-2xl:text-lg
 }
 
 .person-item-info span {
@@ -139,14 +145,29 @@
 }
 
 .person-item-button {
-  @apply absolute bottom-8 right-8 text-base-content
+  @apply absolute bottom-8 right-8 text-white
 }
 
 .sidebar-profile-avatar {
-  @apply border overflow-hidden rounded-full
+  @apply overflow-hidden rounded-full shadow-lg
 }
 
 .profile-img {
   @apply h-full max-w-max
+}
+
+.admission-window {
+  height: calc(100vh - (48px * 4));
+  @apply rounded-3xl flex flex-col items-start justify-start p-12 gap-4 text-2xl max-2xl:p-8
+}
+
+.admission-right-bar {
+  height: calc(100vh - (48px * 4));
+  @apply rounded-3xl flex flex-col text-xl items-center justify-start py-8 px-4 gap-4 max-2xl:text-lg max-2xl:py-8
+}
+
+.divider-mini {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 

@@ -14,6 +14,7 @@ class User extends Model {
   declare username: string
   declare hashed_password: string
   declare email: string
+  declare tel: string
   declare is_verified: boolean
   declare role_id: number
   declare profile_img: string
@@ -46,6 +47,9 @@ User.init(
       type: DataTypes.STRING,
       unique: 'email'
     },
+    tel: {
+      type: DataTypes.STRING
+    },
     is_verified: {
       type: DataTypes.BOOLEAN,
     },
@@ -54,7 +58,7 @@ User.init(
     },
     activation_link: {
       type: DataTypes.STRING,
-    }
+    },
   },
   {
     sequelize,

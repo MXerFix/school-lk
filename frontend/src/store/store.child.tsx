@@ -1,4 +1,5 @@
 import { create } from "zustand"
+import { AdmissionAPIInterface, AdmissionStepUserInterface } from "./store.admission"
 
 export type PersonType = {
   id: number
@@ -41,14 +42,22 @@ export interface ChildCreateType {
 export type ChildCreateResponseType = {
   message: string
   child: ChildType
+  admission: AdmissionAPIInterface
+  step: AdmissionStepUserInterface
 }
 
 type ChildStoreType = {
   child: ChildType | null
-  setChild: (child: ChildType) => void
+  setChild: (child: ChildType | null) => void
+  reset: () => void
+}
+
+const initialState = {
+  child: null,
 }
 
 export const useChildStore = create<ChildStoreType>((set) => ({
   child: null,
   setChild: (child) => set(() => ({ child: child })),
+  reset: () => set(initialState),
 }))

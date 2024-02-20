@@ -36,8 +36,12 @@ const Auth = () => {
         toast.error("Некорректно введен логин или пароль")
       }
     } else {
-      if (email && password && password === secondPassword && password.length >= 8) {
-        registration.SignUpFn()
+      if (email && password && password.length >= 8) {
+        if (password === secondPassword) {
+          registration.SignUpFn()
+        } else {
+          toast.error("Пароли не совпадают")
+        }
       } else {
         toast.error("Некорректно введен логин или пароль")
       }

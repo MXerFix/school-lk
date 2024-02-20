@@ -11,6 +11,7 @@ import toast, { Toaster } from "react-hot-toast"
 import { Info } from "lucide-react"
 import { useParentCreate } from "../../hooks/parents/useParentCreate"
 import { deepEqual } from "../../utils"
+import { useUserStore } from "../../store/store.user"
 
 type ProfileParentBlockType = {
   parent?: ParentType
@@ -18,6 +19,7 @@ type ProfileParentBlockType = {
 
 const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
   const { parents, setParents, addParent } = useParentsStore()
+  const { user } = useUserStore()
   const modalRef = useRef<HTMLDialogElement>(null)
   const { openModal, closeModal } = useDialog(modalRef)
 
@@ -36,7 +38,7 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
   const [passport_department, setPassportDepartment] = useState("")
   const [passport_issuedBy, setPassportIssuedBy] = useState("")
   const [insurance, setInsurance] = useState(parent?.insurance ?? "")
-  const [email, setEmail] = useState(parent?.email ?? "")
+  const [email, setEmail] = useState(parent?.email ?? user?.email ?? "")
   const [tel, setTel] = useState(parent?.tel ?? "")
   const [snils, setSnils] = useState(parent?.snils ?? "")
 
@@ -110,25 +112,25 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
     setGender(parent?.gender ?? "")
     setCitizenship(parent?.citizenship ?? "")
     setInsurance(parent?.insurance ?? "")
-    setEmail(parent?.email ?? "")
+    setEmail(parent?.email ?? user?.email ?? "")
     setTel(parent?.tel ?? "")
     setSnils(parent?.snils ?? "")
-    if (parent && parent.passport) {
-      setPassport((prev) => JSON.parse(parent?.passport ?? ""))
-    }
-  }, [parent, parent?.passport])
+    // if (parent && parent.passport) {
+    //   setPassport((prev) => JSON.parse(parent?.passport ?? ""))
+    // }
+  }, [parent, parent?.passport, user])
 
-  useEffect(() => {
-    if (passport) {
-      setPassportNumber(passport?.number ?? "")
-      setPassportSeries(passport?.series ?? "")
-      setPassportAddress(passport?.address ?? "")
-      setPassportDate(passport?.issue_date ?? "")
-      setPassportDepartment(passport?.department ?? "")
-      setPassportIssuedBy(passport?.issued_by ?? "")
-      setPassportAddressDate(passport?.address_date ?? "")
-    }
-  }, [passport])
+  // useEffect(() => {
+  //   if (passport) {
+  //     setPassportNumber(passport?.number ?? "")
+  //     setPassportSeries(passport?.series ?? "")
+  //     setPassportAddress(passport?.address ?? "")
+  //     setPassportDate(passport?.issue_date ?? "")
+  //     setPassportDepartment(passport?.department ?? "")
+  //     setPassportIssuedBy(passport?.issued_by ?? "")
+  //     setPassportAddressDate(passport?.address_date ?? "")
+  //   }
+  // }, [passport])
 
   const resetToInitial = () => {
     setName(parent_initial.name)
@@ -160,18 +162,18 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
     } else {
       setFirstBlock(false)
     }
-    if (
-      passport_number.length === 6 &&
-      passport_series.length === 4 &&
-      passport_date &&
-      passport_department.length === 7 &&
-      passport_issuedBy &&
-      passport_addressDate
-    ) {
-      setSecondBlock(true)
-    } else {
-      setSecondBlock(false)
-    }
+    // if (
+    //   passport_number.length === 6 &&
+    //   passport_series.length === 4 &&
+    //   passport_date &&
+    //   passport_department.length === 7 &&
+    //   passport_issuedBy &&
+    //   passport_addressDate
+    // ) {
+    //   setSecondBlock(true)
+    // } else {
+    //   setSecondBlock(false)
+    // }
     if (email.length > 5 && tel.length >= 12) {
       setThirdBlock(true)
     } else {
@@ -194,7 +196,7 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
   ])
 
   const saveData = async () => {
-    if (!firstBlock || !secondBlock || !thirdBlock) {
+    if (!firstBlock || !thirdBlock) {
       toast.error("Заполните все обязательные поля", {
         id: "check_fields",
       })
@@ -208,13 +210,13 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
       formData.append("email", email)
       formData.append("tel", tel)
       formData.append("snils", snils)
-      formData.append("passport_number", passport_number)
-      formData.append("passport_series", passport_series)
-      formData.append("passport_address", passport_address)
-      formData.append("passport_addressDate", passport_addressDate)
-      formData.append("passport_date", passport_date)
-      formData.append("passport_department", passport_department)
-      formData.append("passport_issuedBy", passport_issuedBy)
+      // formData.append("passport_number", passport_number)
+      // formData.append("passport_series", passport_series)
+      // formData.append("passport_address", passport_address)
+      // formData.append("passport_addressDate", passport_addressDate)
+      // formData.append("passport_date", passport_date)
+      // formData.append("passport_department", passport_department)
+      // formData.append("passport_issuedBy", passport_issuedBy)
       toast.loading("Сохранение...", { id: "check_parent_data" })
       createParentFn()
     }
@@ -239,9 +241,10 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
         <div className='grid grid-cols-2'>
           <div className='text-2xl flex flex-col gap-2'>
             <p className='flex items-center person-item-info'>
-              <span>
+              <span> ФИО:</span>
+              <p>
                 {parent.surname} {parent.name} {parent.lastname}
-              </span>
+              </p>
             </p>
             <p className='person-item-info'>
               <span> Дата рождения:</span>
@@ -273,7 +276,7 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
           <div className='absolute w-full h-full top-0 left-0 flex items-center justify-center bg-transparent rounded-3xl'>
             <button
               onClick={openModal}
-              className='btn btn-primary'>
+              className='btn btn-primary text-white'>
               {" "}
               Добавить родителя{" "}
             </button>
@@ -300,35 +303,26 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
             },
           }}
         />
-        <div className='modal-box min-w-[960px]'>
+        <div className='modal-box min-w-[760px]'>
           <form method='dialog'>
             {/* if there is a button in form, it will close the modal */}
             <button className='btn btn-sm rounded-xl btn-ghost absolute right-2 top-2'>✕</button>
           </form>
           <div>
-            <h3 className='text-3xl font-bold mb-6'> Анкета родителя </h3>
+            <h3 className='text-3xl font-semibold uppercase mb-6'> Анкета родителя </h3>
           </div>
           <div>
             <div className='flex flex-col items-start justify-start gap-2.5 h-[60vh]'>
               <ModalCollapse
-                defaultOpen
+                defaultOpen={true}
                 flow='column'
                 className='bg-base-200'
-                name='parent-info'
+                name={`parent-info-${parent?.id}`}
                 title={
                   <ModalCollapseTitle isCompleted={firstBlock}>
                     Основная информация
                   </ModalCollapseTitle>
                 }>
-                <LabelInput
-                  // ref={nameRef}
-                  required
-                  label='Имя'
-                  value={name}
-                  setValue={setName}
-                  type='text'
-                  placeholder='Имя*'
-                />
                 <LabelInput
                   // ref={surnameRef}
                   required
@@ -337,6 +331,15 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
                   setValue={setSurname}
                   type='text'
                   placeholder='Фамилия*'
+                />
+                <LabelInput
+                  // ref={nameRef}
+                  required
+                  label='Имя'
+                  value={name}
+                  setValue={setName}
+                  type='text'
+                  placeholder='Имя*'
                 />
                 <LabelInput
                   required
@@ -365,9 +368,9 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
                   options={["Муж", "Жен"]}
                 />
               </ModalCollapse>
-              <ModalCollapse
+              {/* <ModalCollapse
                 className='bg-base-200'
-                name='parent-info'
+                name={`parent-info-${parent?.id}`}
                 title={<ModalCollapseTitle isCompleted={secondBlock}>Паспорт</ModalCollapseTitle>}
                 flow='row'
                 rows={2}
@@ -452,10 +455,10 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
                   setValue={setPassportAddressDate}
                   type='date'
                 />
-              </ModalCollapse>
+              </ModalCollapse> */}
               <ModalCollapse
                 className='bg-base-200'
-                name='parent-info'
+                name={`parent-info-${parent?.id}`}
                 cols={1}
                 rows={2}
                 flow='row'
@@ -490,6 +493,10 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
                 />
               </ModalCollapse>
             </div>
+            <span className='text-sm text-primary flex w-full items-center justify-center mb-4'>
+              {" "}
+              Вводите данные корректно, от этого напрямую зависит успешность поступления!{" "}
+            </span>
             <div className='flex items-center justify-between'>
               <div>
                 <button
