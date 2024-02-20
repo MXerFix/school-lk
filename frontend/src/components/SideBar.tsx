@@ -58,7 +58,7 @@ const SideBar = () => {
           className={classNames(
             "sidebar-menu-item",
             // eslint-disable-next-line no-useless-escape
-            pathname === `/lk/home\/?` && "sidebar-menu-item-active"
+            pathname === `/lk/home` && "sidebar-menu-item-active"
           )}>
           <Home className={"w-5 h-5"} />
           Главная
@@ -72,7 +72,7 @@ const SideBar = () => {
           className={classNames(
             "sidebar-menu-item",
             // eslint-disable-next-line no-useless-escape
-            pathname === "/lk/admission\/?" && "sidebar-menu-item-active"
+            pathname === "/lk/admission" && "sidebar-menu-item-active"
           )}>
           <ScrollText className={"w-5 h-5"} />
           Приемная кампания
@@ -82,7 +82,7 @@ const SideBar = () => {
           to='/lk/me-explorer'
           className={classNames(
             "sidebar-menu-item sidebar-menu-item-wip",
-            pathname === "/lk/me-explorer\/?" && "sidebar-menu-item-active"
+            pathname === "/lk/me-explorer" && "sidebar-menu-item-active"
           )}
           data-tip="В разработке...">
           <TestTube2 className='w-5 h-5' />
@@ -93,7 +93,7 @@ const SideBar = () => {
           to='/lk/sections'
           className={classNames(
             "sidebar-menu-item sidebar-menu-item-wip",
-            pathname === "/lk/sections\/?" && "sidebar-menu-item-active"
+            pathname === "/lk/sections" && "sidebar-menu-item-active"
           )}
           data-tip="В разработке...">
           <Palette className='w-5 h-5' />
@@ -104,7 +104,7 @@ const SideBar = () => {
           to='/lk/payment'
           className={classNames(
             "sidebar-menu-item sidebar-menu-item-wip",
-            pathname === "/lk/payment\/?" && "sidebar-menu-item-active"
+            pathname === "/lk/payment" && "sidebar-menu-item-active"
           )}
           data-tip="В разработке...">
           <Coins className='w-5 h-5' />
@@ -115,7 +115,7 @@ const SideBar = () => {
             to='/admin'
             className={classNames(
               "sidebar-menu-item",
-              pathname === "/admin\/?" && "sidebar-menu-item-active"
+              pathname === "/admin" && "sidebar-menu-item-active"
             )}>
             <Lock className='w-5 h-5' />
             Админ панель

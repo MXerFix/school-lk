@@ -16,7 +16,7 @@ const Auth = () => {
   const { toggleTheme } = useThemeStore()
   const { pathname } = useRouterState().location
   const navigate = useNavigate()
-  const is_registration = pathname === "/registration\/?"
+  const is_registration = pathname === "/registration"
   // const [pending, setPending] = useState(false)
   // const [toast, setToast] = useState(false)
   // const [toastMessage, setToastMessage] = useState("")

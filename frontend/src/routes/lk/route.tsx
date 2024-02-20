@@ -14,7 +14,7 @@ function Index() {
   const { pathname } = useRouterState().location
 
   useEffect(() => {
-    if (pathname === `/lk\/?`) {
+    if (pathname === `/lk`) {
       navigate({
         to: "/lk/home",
       })
