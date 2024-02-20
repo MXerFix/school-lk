@@ -4,7 +4,9 @@ import { REQUIRED_DOCUMENTS } from "src/consts"
 import Admission from "src/db/models/model.admission"
 import Document from "src/db/models/model.document"
 import Exam from "src/db/models/model.exam"
+import Parent from "src/db/models/model.parent"
 import Step, { StepType } from "src/db/models/model.step"
+import User from "src/db/models/model.user"
 import { AdmissionStepStatusType } from "src/db/models/models.types"
 import ApiError from "src/error/error"
 
@@ -52,6 +54,15 @@ class AdmissionController {
   async mutateStepStatus(req: Request, res: Response, next: NextFunction) {
     try {
       const user_dto = req["user"]
+      const user = await User.findByPk(user_dto.id, {
+        include: [Parent],
+      })
+      if (!user) {
+        throw ApiError.BadRequest("Пользователь не найден!", [])
+      }
+      if (!user.dataValues.parents.length) {
+        throw ApiError.BadRequest("Заполните анкету родителя!", [])
+      }
       const admission = await Admission.findOne({
         where: {
           user_id: user_dto.id,

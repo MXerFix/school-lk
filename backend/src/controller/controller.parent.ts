@@ -94,9 +94,7 @@ class ParentController {
           user_id: _user.dataValues.id,
         },
       })
-      setTimeout(() => {
-        return res.json({ message: "Данные о родителе успешно добавлены!", parents })
-      }, 2000)
+      return res.json({ message: "Данные о родителе успешно добавлены!", parents })
     } catch (error) {
       next(error)
       console.log(error)
