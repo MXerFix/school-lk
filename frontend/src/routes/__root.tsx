@@ -33,6 +33,8 @@ function Root() {
   const { getParentsFn, isParentSuccess, isParentPending } = useParentsGet()
   const { getAdmissionFn, isAdmissionPending } = useAdmissionGet()
 
+  console.log(import.meta.env.DEV)
+
   useEffect(() => {
     RefreshAuthFn()
     // if (pathname !== "/auth" && pathname !== "/registration") {
