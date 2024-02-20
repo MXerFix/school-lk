@@ -4,7 +4,7 @@ import { UserLoginType } from "./api"
 import { AUTH_ACCESS_TOKEN } from "../consts"
 
 const $v1 = axios.create({
-  baseURL: "http://localhost:7777/api/v1",
+  baseURL: `${import.meta.env.VITE_API_URL}/api/v1`,
   withCredentials: true,
   timeout: 15000
 })
@@ -28,7 +28,7 @@ $v1.interceptors.response.use(
       console.log(error.config)
       originalRequest._isRetry = true
       try {
-        const response: AxiosResponse<UserLoginType> = await axios.get("http://localhost:7777/api/v1/refresh", { withCredentials: true })
+        const response: AxiosResponse<UserLoginType> = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/refresh`, { withCredentials: true })
         return $v1.request(originalRequest)
       } catch (error) {
         console.log('unauthorized')

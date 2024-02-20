@@ -19,7 +19,7 @@ export const logout = async () => {
 
 export const refresh = async () => {
   const res: AxiosResponse<UserLoginType> = await axios.get(
-    "http://localhost:7777/api/v1/refresh",
+    `${import.meta.env.VITE_API_URL}/api/v1/refresh`,
     { withCredentials: true }
   )
   return res
