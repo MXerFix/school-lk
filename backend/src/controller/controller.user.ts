@@ -22,12 +22,12 @@ class UserController {
       res.cookie("refresh_token", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        secure: process.env.dev !== "true",
+        secure: process.env.SECURE_COOKIE === "true",
       })
       res.cookie("access_token", userData.accessToken, {
         maxAge: 15 * 60 * 1000,
         httpOnly: true,
-        secure: process.env.dev !== "true",
+        secure: process.env.SECURE_COOKIE === "true",
       })
       return res.json(userData)
     } catch (error) {
@@ -45,12 +45,12 @@ class UserController {
       res.cookie("refresh_token", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        secure: process.env.dev !== "true",
+        secure: process.env.SECURE_COOKIE === "true",
       })
       res.cookie("access_token", userData.accessToken, {
         maxAge: 15 * 60 * 1000,
         httpOnly: true,
-        secure: process.env.dev !== "true",
+        secure: process.env.SECURE_COOKIE === "true",
       })
       return res.json(userData)
     } catch (error) {
@@ -77,12 +77,12 @@ class UserController {
       res.cookie("refresh_token", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        secure: process.env.dev !== "true",
+        secure: process.env.SECURE_COOKIE === "true",
       })
       res.cookie("access_token", userData.accessToken, {
         maxAge: 15 * 60 * 1000,
         httpOnly: true,
-        secure: process.env.dev !== "true",
+        secure: process.env.SECURE_COOKIE === "true",
       })
       return res.json(userData)
     } catch (error) {
