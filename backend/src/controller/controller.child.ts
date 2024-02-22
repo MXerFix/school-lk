@@ -150,6 +150,9 @@ class ChildController {
       const _user = await User.findByPk(userData.id, {
         include: Child,
       })
+      if (!_user) {
+        return next(ApiError.BadRequest("Пользователя с таким id не существует!", []))
+      }
       const childId = _user.dataValues.child.id // Assuming you have the child's ID in the request parameters
       const child = await Child.findByPk<Model<ChildType>>(childId)
 

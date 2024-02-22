@@ -6,7 +6,7 @@ import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
 export default defineConfig({
   plugins: [react(), TanStackRouterVite()],
   build:{
-    outDir: '../backend/dist',
+    outDir: '../dist',
     emptyOutDir: true,
     rollupOptions: {
       output: {

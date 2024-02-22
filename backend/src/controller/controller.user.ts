@@ -1,3 +1,4 @@
+import UserDTO from 'src/dto/dto.user';
 import { NextFunction, Request, Response } from "express"
 import Child from "src/db/models/model.child"
 import Parent from "src/db/models/model.parent"
@@ -64,7 +65,7 @@ class UserController {
       const token = await userService.logout(refresh_token)
       if (token) {
         res.clearCookie("refresh_token").clearCookie("access_token").json({ message: "logout" })
-      } 
+      }
     } catch (error) {
       next(error)
     }
@@ -86,7 +87,7 @@ class UserController {
       })
       return res.json(userData)
     } catch (error) {
-      res.clearCookie('refresh_token').clearCookie('access_token')
+      res.clearCookie("refresh_token").clearCookie("access_token")
       next(error)
     }
   }
@@ -100,11 +101,40 @@ class UserController {
       }
       const correct_link = activation_link.toString()
       const user = await userService.activate(correct_link)
-      return res.redirect(process.env.CLIENT_URL + '/lk/home?activated=true')
+      return res.redirect(process.env.CLIENT_URL + "/lk/home?activated=true")
     } catch (error) {
       console.log(error)
       next(error)
     }
+  }
+
+  async modal_activate(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { activation_link } = req.body
+      if (!activation_link) {
+        throw ApiError.BadRequest("Некорректная ссылка активации!", [])
+      }
+      const user = await userService.activate(activation_link)
+      return res.json({message: "Активация прошла успешно", user: new UserDTO(user.dataValues)})
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
+
+  async change_tel(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await User.findByPk(req["user"].id)
+      if (!user) {
+        throw ApiError.BadRequest("Пользователь не найден!", [])
+      }
+      const { tel } = req.body
+      if (!tel) {
+        throw ApiError.BadRequest("Некорректный телефон!", [])
+      }
+      await user.update({ tel })
+      return res.json({ message: "Телефон успешно изменен", user })
+    } catch (error) {}
   }
 }
 

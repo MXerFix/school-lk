@@ -1,4 +1,5 @@
 import { create } from "zustand"
+import { UserDataLoginType } from "../api/api"
 
 export type PersonType = {
   id: number
@@ -55,6 +56,7 @@ export type ParentPassportType = {
 export type ParentCreateResponseType = {
   message: string
   parents: ParentType[]
+  user?: UserDataLoginType
 }
 
 type ParentStoreType = {

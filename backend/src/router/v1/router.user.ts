@@ -15,12 +15,15 @@ user_router.put('/children', ChildController.mutate)
 
 user_router.get('/parents', ParentController.get)
 user_router.post('/parents', ParentController.create)
+user_router.put('/parents', ParentController.mutate)
 
 user_router.get('/admission', AdmissionController.get)
 user_router.post('/admission/step', AdmissionController.mutateStepStatus)
 
 user_router.post('/admission/documents', controllerDocument.create)
 user_router.get('/admission/documents', controllerDocument.getRequiredDocuments)
+
+user_router.put('/tel', UserController.change_tel)
 
 
 export default user_router

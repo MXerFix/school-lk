@@ -21,6 +21,7 @@ router_v1.post("/login", UserController.login)
 router_v1.post("/logout", UserController.logout)
 router_v1.get("/refresh", UserController.refresh)
 router_v1.get('/activate', UserController.activate)
+router_v1.post('/activate', UserController.modal_activate)
 router_v1.use("/user", authMiddleware, verifyMiddleware, user_router)
 
 export default router_v1

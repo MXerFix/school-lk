@@ -6,6 +6,7 @@ import User from "src/db/models/model.user"
 import { ChildType, ParentCreateType, ParentType, UserType } from "src/db/models/models.types"
 import UserDTO from "src/dto/dto.user"
 import ApiError from "src/error/error"
+import createUserDTO from "src/helper/createUserDTO"
 
 class ParentController {
   async create(req: Request, res: Response, next: NextFunction) {
@@ -94,10 +95,78 @@ class ParentController {
           user_id: _user.dataValues.id,
         },
       })
-      return res.json({ message: "Данные о родителе успешно добавлены!", parents })
+      if (!_user.dataValues.tel) {
+        _user.set({
+          tel: parent_data.tel,
+        })
+        await _user.save()
+      }
+      return res.json({
+        message: "Данные о родителе успешно добавлены!",
+        parents,
+        user: new UserDTO(_user.dataValues),
+      })
     } catch (error) {
       next(error)
       console.log(error)
+    }
+  }
+
+  async mutate(req: Request, res: Response, next: NextFunction) {
+    try {
+      const parent_data: ParentCreateType = req.body
+      const user: UserDTO = req["user"]
+      if (
+        !parent_data.name ||
+        !parent_data.surname ||
+        !parent_data.birthDate ||
+        !parent_data.gender ||
+        !parent_data.email ||
+        !parent_data.tel
+      ) {
+        return next(
+          ApiError.BadRequest(
+            "Некорректные данные родителя! Одно из обязательных полей не заполнено!",
+            []
+          )
+        )
+      }
+      const _user = await User.findByPk<Model<UserType>>(user.id)
+      if (!_user) {
+        return next(ApiError.BadRequest("Пользователя с таким id не существует!", []))
+      }
+      const _parent = await Parent.findOne<Model<ParentType>>({
+        where: {
+          id: parent_data.id,
+        },
+      })
+      if (!_parent) {
+        return next(
+          ApiError.BadRequest(
+            "Пожалуйста, добавьте данные о родителе, прежде чем добавлять его!",
+            []
+          )
+        )
+      }
+      _parent.set({
+        name: parent_data.name,
+        surname: parent_data.surname,
+        lastname: parent_data.lastname,
+        birthDate: parent_data.birthDate,
+        gender: parent_data.gender,
+        email: parent_data.email,
+        tel: parent_data.tel,
+      })
+      await _parent.save()
+      const parents = await Parent.findAll<Model<ParentType>>({
+        where: {
+          user_id: _user.dataValues.id,
+        },
+      })
+      return res.json({ message: "Данные о родителе успешно обновлены!", parents })
+    } catch(error) {
+      console.log(error)
+      next(error)
     }
   }
 

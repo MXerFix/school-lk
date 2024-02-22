@@ -150,7 +150,7 @@ const ProfileChildBlock = () => {
   }
 
   useEffect(() => {
-    if (!validateAge(birthDate, 5, 7)) {
+    if (!validateAge(birthDate, 5, 7) && birthDate) {
       toast.error('Некорректная дата рождения', {
         id: 'child_age_lower_warn'
       })
@@ -198,7 +198,7 @@ const ProfileChildBlock = () => {
       title={"СВЕДЕНИЯ ОБ УЧЕНИКЕ"}
       size='huge'>
       {child ? (
-        <div className='text-2xl flex flex-col gap-2'>
+        <div className='text-2xl flex flex-col flex-wrap max-h-full gap-2'>
           <p className='flex items-center person-item-info'>
             <span> ФИО:</span>
             {child.surname} {child.name} {child.lastname}

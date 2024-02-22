@@ -4,6 +4,7 @@ import toast from "react-hot-toast"
 import { ParentCreateResponseType, ParentCreateType, useParentsStore } from "../../store/store.parents"
 import { create_parent } from "../../api/parents"
 import { useChildStore } from "../../store/store.child"
+import { useUserStore } from "../../store/store.user"
 
 export type RequestValidationError = {
   message: string
@@ -14,6 +15,7 @@ export function useParentCreate(parent: ParentCreateType) {
   
   const { setParents } = useParentsStore()
   const { child } = useChildStore()
+  const { setUser } = useUserStore()
 
   const {
     mutate: createParentFn,
@@ -32,6 +34,9 @@ export function useParentCreate(parent: ParentCreateType) {
     },
     onSuccess: ({ data }: { data: ParentCreateResponseType }) => {
       setParents(data.parents)
+      if (data.user) {
+        setUser(data.user)
+      }
       toast.dismiss('check_parent_data')
       toast.success("Данные успешно сохранены")
     },

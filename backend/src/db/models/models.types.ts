@@ -51,24 +51,24 @@ export interface ParentType extends PersonType {
 }
 
 export interface ParentCreateType {
-  id: number
+  id?: number
   name: string
   lastname?: string
   surname: string
   birthDate: string
   gender: "male" | "female"
-  citizenship: string
+  citizenship?: string
   email: string
   tel: string
-  relation_type: relationType
-  snils: string
-  passport_number: string
-  passport_series: string
-  passport_address: string
-  passport_date: string
-  passport_department: string
-  passport_issuedBy: string
-  passport_addressDate: string
+  relation_type?: relationType
+  snils?: string
+  passport_number?: string
+  passport_series?: string
+  passport_address?: string
+  passport_date?: string
+  passport_department?: string
+  passport_issuedBy?: string
+  passport_addressDate?: string
 }
 
 export type AdmissionStepStatusType = "success" | "failed" | "pending" | "initial" | "closed" | "incorrect"

@@ -12,6 +12,7 @@ import { Info } from "lucide-react"
 import { useParentCreate } from "../../hooks/parents/useParentCreate"
 import { deepEqual, validateAge, validateRussianPhoneNumber } from "../../utils"
 import { useUserStore } from "../../store/store.user"
+import { useParentMutate } from "../../hooks/parents/useParentMutate"
 
 type ProfileParentBlockType = {
   parent?: ParentType
@@ -151,6 +152,7 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
   }
 
   const { createParentFn, isSuccess, isPending } = useParentCreate(parent_state)
+  const { mutateParentFn } = useParentMutate()
 
   const [firstBlock, setFirstBlock] = useState(false)
   const [secondBlock, setSecondBlock] = useState(false)
@@ -164,7 +166,13 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
   // }, [birthDate])
 
   useEffect(() => {
-    if (name.length > 0 && surname.length > 0 && birthDate && gender && validateAge(birthDate, 18, 99)) {
+    if (
+      name.length > 0 &&
+      surname.length > 0 &&
+      birthDate &&
+      gender &&
+      validateAge(birthDate, 18, 99)
+    ) {
       setFirstBlock(true)
     } else {
       setFirstBlock(false)
@@ -204,10 +212,10 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
 
   const saveData = async () => {
     if (!validateRussianPhoneNumber(tel)) {
-      toast.error('Некорректный номер телефона', { id: 'check_phone' })
+      toast.error("Некорректный номер телефона", { id: "check_phone" })
     }
     if (!validateAge(birthDate, 18, 99)) {
-      return toast.error('Некорректная дата рождения', { id: 'parent_age_lower_warn' })
+      return toast.error("Некорректная дата рождения", { id: "parent_age_lower_warn" })
     } else {
       if (!firstBlock || !thirdBlock) {
         toast.error("Заполните все обязательные поля", {
@@ -236,6 +244,41 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
     }
   }
 
+  const editData = async () => {
+    if (!validateRussianPhoneNumber(tel)) {
+      toast.error("Некорректный номер телефона", { id: "check_phone" })
+    }
+    if (!validateAge(birthDate, 18, 99)) {
+      return toast.error("Некорректная дата рождения", { id: "parent_age_lower_warn" })
+    } else {
+      if (!firstBlock || !thirdBlock) {
+        toast.error("Заполните все обязательные поля", {
+          id: "check_fields",
+        })
+      } else {
+        const formData = new FormData()
+        formData.append("id", parent?.id.toString() ?? '-1')
+        formData.append("name", name)
+        formData.append("surname", surname)
+        formData.append("lastname", lastname)
+        formData.append("birthDate", birthDate)
+        formData.append("gender", gender)
+        formData.append("email", email)
+        formData.append("tel", tel)
+        formData.append("snils", snils)
+        // formData.append("passport_number", passport_number)
+        // formData.append("passport_series", passport_series)
+        // formData.append("passport_address", passport_address)
+        // formData.append("passport_addressDate", passport_addressDate)
+        // formData.append("passport_date", passport_date)
+        // formData.append("passport_department", passport_department)
+        // formData.append("passport_issuedBy", passport_issuedBy)
+        toast.loading("Сохранение...", { id: "edit_parent_data" })
+        mutateParentFn(formData)
+      }
+    }
+  }
+
   const relation_type = useMemo(() => {
     return {
       father: "Отец",
@@ -252,8 +295,8 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
       title={"СВЕДЕНИЯ О РОДИТЕЛЕ"}
       size='huge'>
       {parent ? (
-        <div className='grid grid-cols-2'>
-          <div className='text-2xl flex flex-col gap-2'>
+        <>
+          <div className='text-2xl flex flex-col flex-wrap max-h-full gap-2'>
             <p className='flex items-center person-item-info'>
               <span> ФИО:</span>
               <p>
@@ -284,7 +327,7 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
               Подробнее{" "}
             </button>
           </div>
-        </div>
+        </>
       ) : (
         <>
           <div className='absolute w-full h-full top-0 left-0 flex items-center justify-center bg-transparent rounded-3xl'>
@@ -527,7 +570,7 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
                 </button>
                 <button
                   disabled={isEqual}
-                  onClick={saveData}
+                  onClick={parent ? editData : saveData}
                   className='btn btn-success text-base-content'>
                   Сохранить
                 </button>

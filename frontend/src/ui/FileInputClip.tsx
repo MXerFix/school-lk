@@ -10,7 +10,7 @@ type FileInputClipType = {
   disabled?: boolean
 }
 
-const FileInputClip = ({ label, downloadLink, file, setFile, accept="application/pdf", disabled=false }: FileInputClipType) => {
+const FileInputClip = ({ label, downloadLink, file, setFile, accept="application/pdf, image/jpeg, image/png, image/webp, .doc, .docx", disabled=false }: FileInputClipType) => {
   const id = Math.random().toString(36).substring(2, 15)
 
   const selectFileHandler = (e: React.ChangeEvent<HTMLInputElement>) => {

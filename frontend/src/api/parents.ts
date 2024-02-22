@@ -9,3 +9,7 @@ export const create_parent = async (parent: ParentCreateType) => {
 export const get_parents = async () => {
   return $v1.get("/user/parents")
 }
+
+export const mutate_parents = async (formData: FormData) => {
+  return $v1.put("/user/parents", formData)
+}

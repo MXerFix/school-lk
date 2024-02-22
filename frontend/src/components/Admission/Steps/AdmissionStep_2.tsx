@@ -7,10 +7,11 @@ import { useDocumentCreate } from "../../../hooks/documents/useDocumentCreate"
 import { createFormData } from "../../../utils"
 import { useDocumentGetReq } from "../../../hooks/documents/useDocumentGetReq"
 import { useSearch } from "@tanstack/react-router"
+import { useChildStore } from "../../../store/store.child"
 
 const AdmissionStep_2 = () => {
-
   const { activeStep, steps } = useAdmissionStore()
+  const { child } = useChildStore()
   const { MutateAdmissionStepFn, isAdmissionMutatePending, data } = useAdmissionStepMutate()
   const { createDocumentFn, isCreateDocumentSuccess, isCreateDocumentPending } = useDocumentCreate()
   const { getReqDocumentFn, isGetReqDocumentSuccess, isGetReqDocumentPending } =
@@ -18,9 +19,10 @@ const AdmissionStep_2 = () => {
 
   const [file, setFile] = useState<File>()
 
-  const is_status_pending = useMemo(() => steps[activeStep]?.status === "pending", [steps, activeStep, isAdmissionMutatePending])
-  
-
+  const is_status_pending = useMemo(
+    () => steps[activeStep]?.status === "pending",
+    [steps, activeStep, isAdmissionMutatePending]
+  )
 
   const nextStepHandler = () => {
     if (file) {
@@ -53,6 +55,8 @@ const AdmissionStep_2 = () => {
     }
   }, [isGetReqDocumentPending, isGetReqDocumentSuccess])
 
+  const placeholder = `ST00012|Name=ОБЩЕОБРАЗОВАТЕЛЬНАЯ АВТОНОМНАЯ НЕКОММЕРЧЕСКАЯ ОРГАНИЗАЦИЯ "НАЧАЛЬНАЯ ШКОЛА ФИЗТЕХ-ЛИЦЕЯ"|PersonalAcc=40703810800000707919|BankName=АО "ТИНЬКОФФ БАНК"|BIC=044525974|CorrespAcc=30101810145250000974|KPP=504701001|PayeeINN=5047212585|Purpose=Организационный взнос за участие в конкурсном отборе ${child?.surname} ${child?.name} ${child?.lastname}|Sum=400000`
+
   return (
     <div>
       <div>
@@ -74,21 +78,23 @@ const AdmissionStep_2 = () => {
         ) : (
           <>
             <p className='max-2xl:text-lg mb-8'>
-              На этом этапе вам предстоит оплатить приемную кампанию. После оплаты прикрепите квитанцию
-              об оплате или чек в соответствующее поле. Иначе переход к следующему шагу не будет
-              доступен.
+              На этом этапе вам предстоит оплатить приемную кампанию. После оплаты прикрепите
+              квитанцию об оплате или чек в соответствующее поле. Иначе переход к следующему шагу не
+              будет доступен.
             </p>
             <div className='flex items-start justify-between w-full'>
               <label htmlFor=''>
                 <p className='mb-4'> QR-Код для оплаты </p>
                 <img
-                  src='https://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data=%D1%8D%D1%82%D0%BE+qr-code+%D0%BD%D0%B0+%D0%BE%D0%BF%D0%BB%D0%B0%D1%82%D1%83&amp;qzone=1&amp;margin=0&amp;size=256x256&amp;ecc=L'
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${placeholder}&format=svg`}
                   alt='qr code'
+                  draggable={false}
+                  className='w-64 h-64 object-contain'
                 />
-                <span className='text-sm mt-6 block'>
-                  В комментарии к платежу укажите ФИО ребенка.
+                <span className='text-primary font-medium text-sm mt-6 block'>
+                  В назначении платежа укажите ФИО ребенка.
                 </span>
-                <span className='text-sm mt-1.5 block'>
+                {/* <span className='text-sm mt-1.5 block'>
                   {" "}
                   Если qr-код работает некорректно, перейдите по{" "}
                   <a
@@ -98,15 +104,15 @@ const AdmissionStep_2 = () => {
                     ссылке
                   </a>
                   .{" "}
-                </span>
+                </span> */}
                 <span className='text-sm mt-1.5 block'>
                   {" "}
-                  Скачать{" "}
+                  Оплачивая приемную кампанию вы соглашаетесь с условиями{" "}
                   <a
                     className='link link-primary'
                     href={`${import.meta.env.VITE_API_URL}/static/downloads/schet_oferta_priemnaya_kampania.docx`}
                     target='_blank'>
-                    счет-оферту
+                    оферты
                   </a>
                   .{" "}
                 </span>
@@ -145,7 +151,7 @@ const AdmissionStep_2 = () => {
         )}
       </div>
       <NextStepButton
-        className={is_status_pending ? 'blur-sm' : ''}
+        className={is_status_pending ? "blur-sm" : ""}
         nextStepHandler={nextStepHandler}
         disabled={!file || is_status_pending}
         pending={isCreateDocumentPending || isGetReqDocumentPending}

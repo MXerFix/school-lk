@@ -27,7 +27,7 @@ app.use(cookieParser())
 app.use(
   cors({
     credentials: true,
-    origin: process.env.CLIENT_URL,
+    origin: process.env.dev === "true" ? "http://localhost:5173" : process.env.CLIENT_URL,
   })
 )
 app.disable("x-powered-by")
@@ -39,13 +39,6 @@ configDotenv()
 // })
 
 app.use(limit)
-app.use('/auth', express.static(path.resolve(__dirname, "../dist")))
-app.use('/registration', express.static(path.resolve(__dirname, "../dist")))
-app.use('/lk', express.static(path.resolve(__dirname, "../dist")))
-app.use('/lk/*', express.static(path.resolve(__dirname, "../dist")))
-app.use('/admin', express.static(path.resolve(__dirname, "../dist")))
-app.use('/admin/*', express.static(path.resolve(__dirname, "../dist")))
-app.use("/", express.static(path.resolve(__dirname, "../dist")))
 app.use("/static", authMiddleware, express.static(path.resolve(__dirname, "../static")))
 app.use("/static/img", authMiddleware, express.static(path.resolve(__dirname, "../static/img")))
 app.use("/documents", authMiddleware, documentMiddleware, express.static(path.resolve(__dirname, "../documents")))
