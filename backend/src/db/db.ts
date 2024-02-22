@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize"
 import models_init from "./models/models"
 
 const is_dev = process.env.dev === "true"
+console.log(is_dev)
 const db_name = is_dev ? "school_lk" : process.env.DB_NAME
 const db_user = is_dev ? "root" : process.env.DB_USER
 const db_password = is_dev ? "Maks2347" : process.env.DB_PASSWORD
