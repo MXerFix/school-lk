@@ -43,7 +43,9 @@ export function useRefresh() {
         })
       }
       if (error.response?.status !== 401) {
-        toast.error(error.message)
+        toast.error(error.message, {
+          id: error.message
+        })
       }
     },
   })

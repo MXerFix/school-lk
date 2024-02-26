@@ -11,6 +11,8 @@ import path from "path"
 import authMiddleware from "./middleware/middleware.auth"
 import { rateLimit } from "express-rate-limit"
 import documentMiddleware from "./middleware/middleware.check-document-user"
+import helmet from "helmet"
+import xss from "xss-clean";
 
 const app: Express = express()
 
@@ -20,10 +22,14 @@ const limit = rateLimit({
   message: async (req, res, next) => {
     return res.json({ message: "Слишком много запросов" })
   },
+  legacyHeaders: false,
+  standardHeaders: true,
 })
 
 app.use(express.json())
 app.use(cookieParser())
+app.use(helmet())
+app.use(xss())
 app.use(
   cors({
     credentials: true,

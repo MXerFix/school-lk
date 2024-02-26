@@ -6,7 +6,7 @@ const verifyMiddleware = (req: any, res: any, next: any) => {
     if (req.user.is_verified) {
       next()
     } else {
-      throw ApiError.ForbiddenError("Not verified")
+      throw ApiError.ForbiddenError("Пользователь не верифицирован!")
     }
   } catch (error) {
     console.log(error)

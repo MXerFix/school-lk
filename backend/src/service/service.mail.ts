@@ -3,19 +3,20 @@ class MailService {
   transporter: Transporter;
   constructor() {
     this.transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,
+      host: 'mail.nic.ru',
+      port: 465,
+      secure: true,
       auth: {
-        user: 'xajlonefpemob@gmail.com',
-        pass: 'ywwn jjzz vwvr chwi'
+        user: 'pk@jftl.ru',
+        // pass: 'ywwn jjzz vwvr chwi'
+        pass: 'B%qN%4n99PNhi2Ke'
       }
     })
   }
 
   async sendActivationMail(to: string, link: string) {
     await this.transporter.sendMail({
-      from: 'xajlonefpemob@gmail.com',
+      from: 'pk@jftl.ru',
       to,
       subject: 'Активация аккаунта в личном кабинете JFTL',
       html: `

@@ -32,9 +32,13 @@ export function useAdmissionGet() {
     },
     onError: (error: AxiosError<RequestValidationError>) => {
       if (error.response?.data.message) {
-        toast.error(error.response?.data.message)
+        toast.error(error.response?.data.message, {
+          id: error.response?.data.message
+        })
       } else {
-        toast.error(error.message)
+        toast.error(error.message, {
+          id: error.message
+        })
       }
     },
   })

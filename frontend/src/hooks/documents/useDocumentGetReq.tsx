@@ -35,9 +35,13 @@ export function useDocumentGetReq(step_index: number) {
     onError: (error: AxiosError<RequestValidationError>) => {
       toast.dismiss('check_documents_data')
       if (error.response?.data.message) {
-        toast.error(error.response?.data.message)
+        toast.error(error.response?.data.message, {
+          id: error.response?.data.message
+        })
       } else {
-        toast.error(error.message)
+        toast.error(error.message, {
+          id: error.message
+        })
       }
     },
   })
