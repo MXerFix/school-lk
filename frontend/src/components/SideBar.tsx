@@ -32,13 +32,13 @@ const SideBar = () => {
           {user?.profile_img ? (
             <img
               className="profile-img"
-              src={`${import.meta.env.VITE_API_URL}/static/img/${user.profile_img}`}
+              src={`${import.meta.env.VITE_API_URL ?? "http://localhost:7777"}/static/img/${user.profile_img}`}
               alt=''
             />
           ) : child?.img ? (
             <img
               className="profile-img"
-              src={`${import.meta.env.VITE_API_URL}/static/img/${child.img}`}
+              src={`${import.meta.env.VITE_API_URL ?? 'http://localhost:7777'}/static/img/${child.img}`}
               alt=''
             />
           ) : (

@@ -149,14 +149,14 @@ const ProfileChildBlock = () => {
     }
   }
 
-  useEffect(() => {
-    if (!validateAge(birthDate, 5, 7) && birthDate) {
-      toast.error('Некорректная дата рождения', {
-        id: 'child_age_lower_warn'
-      })
-      setFirstBlock(false)
-    }
-  }, [birthDate])
+  // useEffect(() => {
+  //   if (!validateAge(birthDate, 5, 7) && birthDate) {
+  //     toast.error('Некорректная дата рождения', {
+  //       id: 'child_age_lower_warn'
+  //     })
+  //     setFirstBlock(false)
+  //   }
+  // }, [birthDate])
 
   useEffect(() => {
     if (name.length > 0 && surname.length > 0 && birthDate && validateAge(birthDate, 5, 7) && gender && (img || child?.img)) {
@@ -222,7 +222,7 @@ const ProfileChildBlock = () => {
               <>
                 <img
                   className='profile-img'
-                  src={`${import.meta.env.VITE_API_URL}/static/img/${child.img}`}
+                  src={`${import.meta.env.VITE_API_URL ?? 'http://localhost:7777'}/static/img/${child.img}`}
                   alt=''
                 />
               </>
@@ -299,6 +299,7 @@ const ProfileChildBlock = () => {
                   setValue={setSurname}
                   type='text'
                   placeholder='Фамилия*'
+                  min={2}
                 />
                 <LabelInput
                   // ref={nameRef}
@@ -308,6 +309,7 @@ const ProfileChildBlock = () => {
                   setValue={setName}
                   type='text'
                   placeholder='Имя*'
+                  min={2}
                 />
                 <LabelInput
                   required
@@ -317,6 +319,7 @@ const ProfileChildBlock = () => {
                   setValue={setLastname}
                   type='text'
                   placeholder='Отчество (при наличии)'
+                  min={2}
                 />
                 <LabelInput
                   // ref={birthDateRef}

@@ -58,9 +58,9 @@ const AdmissionStep_2 = () => {
   const placeholder = `ST00012|Name=ОБЩЕОБРАЗОВАТЕЛЬНАЯ АВТОНОМНАЯ НЕКОММЕРЧЕСКАЯ ОРГАНИЗАЦИЯ "НАЧАЛЬНАЯ ШКОЛА ФИЗТЕХ-ЛИЦЕЯ"|PersonalAcc=40703810800000707919|BankName=АО "ТИНЬКОФФ БАНК"|BIC=044525974|CorrespAcc=30101810145250000974|KPP=504701001|PayeeINN=5047212585|Purpose=Организационный взнос за участие в конкурсном отборе ${child?.surname} ${child?.name} ${child?.lastname}|Sum=400000`
 
   return (
-    <div>
-      <div>
-        <h2 className='text-3xl font-medium mb-8'>Оплата приемной кампании</h2>
+    <div className="flex flex-col justify-between h-full">
+      <div className="">
+        <h2 className='text-3xl max-2xl:text-xl font-medium mb-8 max-2xl:mb-4'>Оплата приемной кампании</h2>
         {is_status_pending ? (
           <div className='absolute top-0 left-0 w-full h-full flex flex-col px-8 justify-center items-center rounded-3xl backdrop-blur-sm '>
             <h3 className='mb-8 text-3xl'> Оплата принята в обработку! </h3>
@@ -77,14 +77,14 @@ const AdmissionStep_2 = () => {
           </div>
         ) : (
           <>
-            <p className='max-2xl:text-lg mb-8'>
+            <p className='max-2xl:text-base mb-8 max-2xl:mb-4'>
               На этом этапе вам предстоит оплатить приемную кампанию. После оплаты прикрепите
               квитанцию об оплате или чек в соответствующее поле. Иначе переход к следующему шагу не
               будет доступен.
             </p>
             <div className='flex items-start justify-between w-full'>
               <label htmlFor=''>
-                <p className='mb-4'> QR-Код для оплаты </p>
+                <p className='mb-4 max-2xl:text-2xl'> QR-Код для оплаты </p>
                 <img
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${placeholder}&format=svg`}
                   alt='qr code'
@@ -110,7 +110,7 @@ const AdmissionStep_2 = () => {
                   Оплачивая приемную кампанию вы соглашаетесь с условиями{" "}
                   <a
                     className='link link-primary'
-                    href={`${import.meta.env.VITE_API_URL}/static/downloads/schet_oferta_priemnaya_kampania.docx`}
+                    href={`${import.meta.env.VITE_API_URL ?? 'http://localhost:7777'}/static/downloads/schet_oferta_priemnaya_kampania.docx`}
                     target='_blank'>
                     оферты
                   </a>

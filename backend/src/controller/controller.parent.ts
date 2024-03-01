@@ -143,10 +143,15 @@ class ParentController {
       if (!_parent) {
         return next(
           ApiError.BadRequest(
-            "Пожалуйста, добавьте данные о родителе, прежде чем добавлять его!",
+            "Пожалуйста, добавьте данные о родителе, прежде чем обновлять его!",
             []
           )
         )
+      }
+      if (parent_data.gender !== _parent.dataValues.gender) {
+        _parent.set({
+          relation_type: parent_data.gender === "female" ? "mother" : "father",
+        })
       }
       _parent.set({
         name: parent_data.name,

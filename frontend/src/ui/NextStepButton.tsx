@@ -19,13 +19,15 @@ const NextStepButton = ({
   ...props
 }: NextStepButtonType) => {
   return (
-    <button
+    <div className="flex w-full items-center justify-end sticky bottom-0 right-8">
+      <button
       onClick={nextStepHandler}
-      className={classNames('btn btn-success text-base-content absolute bottom-8 right-8 text-lg', className)}
+      className={classNames('btn btn-success text-base-content  text-lg z-20 max-2xl:bottom-4 max-2xl:right-4', className)}
       disabled={activeStep > step_index || disabled}
       {...props}>
       {pending ? <span className='loading loading-spinner'></span> : "Перейти к следующему шагу"}
     </button>
+    </div>
   )
 }
 

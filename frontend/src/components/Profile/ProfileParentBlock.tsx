@@ -316,7 +316,7 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
               {parent.tel}
             </p>
           </div>
-          <div className='absolute top-8 right-8 bg-base-neutral w-32 h-32 rounded-full flex items-center justify-center'>
+          <div className='absolute top-8 right-8 bg-base-neutral w-32 h-32 rounded-full flex items-center justify-center sidebar-profile-avatar'>
             <p>{relation_type[parent.relation_type]}</p>
           </div>
           <div className='flex items-center justify-end'>

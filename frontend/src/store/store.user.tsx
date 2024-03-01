@@ -25,10 +25,16 @@ const initialState = {
 }
 
 
-export const useUserStore = create<UserStoreInterface>((set) => ({
-  user: null,
-  setUser: ( user: UserDataLoginType ) => set(() => ({ user: user })),
-  is_login: false,
-  setIsLogin: (value: boolean) => set(() => ({ is_login: value })),
-  reset: () => set(initialState),
-}))
+
+
+export const useUserStore = create<UserStoreInterface>((set) => {
+  
+
+  return ({
+    user: null,
+    setUser: ( user: UserDataLoginType ) => set(() => ({ user: user })),
+    is_login: false,
+    setIsLogin: (value: boolean) => set(() => ({ is_login: value })),
+    reset: () => set(initialState),
+  })
+})

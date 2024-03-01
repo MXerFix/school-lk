@@ -10,7 +10,14 @@ type FileInputClipType = {
   disabled?: boolean
 }
 
-const FileInputClip = ({ label, downloadLink, file, setFile, accept="application/pdf, image/jpeg, image/png, image/webp, .doc, .docx", disabled=false }: FileInputClipType) => {
+const FileInputClip = ({
+  label,
+  downloadLink,
+  file,
+  setFile,
+  accept = "application/pdf, image/jpeg, image/png, image/webp, .doc, .docx",
+  disabled = false,
+}: FileInputClipType) => {
   const id = Math.random().toString(36).substring(2, 15)
 
   const selectFileHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,30 +25,34 @@ const FileInputClip = ({ label, downloadLink, file, setFile, accept="application
   }
 
   return (
-    <div className='flex items-center justify-start gap-4'>
-      <label className="max-2xl:text-base"> {label} </label>
-      {downloadLink && (
-        <a
-          className='flex items-center gap-2 bg-button-file h-8 px-2 rounded-lg'
-          href={downloadLink}>
-          {" "}
-          скачать <Download />{" "}
-        </a>
-      )}
-      <input
-        disabled={disabled}
-        accept={accept}
-        className='hidden'
-        onChange={selectFileHandler}
-        id={id}
-        type='file'
-      />
-      <label className="bg-button-file p-1 rounded-lg cursor-pointer" htmlFor={id}>
-        <span>
-          <Paperclip className="w-6 h-6" />
-        </span>
-      </label>
-      {file && file?.name && <Check className='text-success' />}
+    <div className='flex items-center justify-between gap-4'>
+      <label className='max-2xl:text-sm'> {label} </label>
+      <div className="flex items-center justify-start gap-1">
+        {downloadLink && (
+          <a
+            className='flex items-center gap-2 bg-button-file h-8 px-2 rounded-lg'
+            href={downloadLink}>
+            {" "}
+            скачать <Download />{" "}
+          </a>
+        )}
+        <input
+          disabled={disabled}
+          accept={accept}
+          className='hidden'
+          onChange={selectFileHandler}
+          id={id}
+          type='file'
+        />
+        <label
+          className='bg-button-file p-1 rounded-lg cursor-pointer'
+          htmlFor={id}>
+          <span>
+            <Paperclip className='w-6 h-6' />
+          </span>
+        </label>
+        <Check className={`text-success scale-x-0 opacity-0 transition-all ${file && file.name && 'scale-x-100 opacity-100'}`} />
+      </div>
     </div>
   )
 }

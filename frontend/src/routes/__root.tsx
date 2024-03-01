@@ -27,6 +27,7 @@ function Root() {
   const { theme } = useThemeStore()
   const [isLoading, setIsLoading] = useState(true)
   const { pathname } = useRouterState().location
+  const { is_login } = useUserStore()
 
   const { RefreshAuthFn, isRefreshSuccess, isRefreshPending } = useRefresh()
   const { getChildFn, isChildSuccess, isChildPending } = useChildGet()
@@ -34,6 +35,7 @@ function Root() {
   const { getAdmissionFn, isAdmissionPending } = useAdmissionGet()
 
   console.log(import.meta.env.DEV)
+  console.log(is_login)
 
   useEffect(() => {
     RefreshAuthFn()

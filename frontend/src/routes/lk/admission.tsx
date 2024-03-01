@@ -29,7 +29,7 @@ const Admission = () => {
 
   return (
     <div className='grid grid-cols-5 col-span-3 gap-12 w-full'>
-      <div className='bg-primary-content content-block-shadow col-span-4 admission-window relative'>
+      <div className='bg-primary-content content-block-shadow col-span-4 admission-window overflow-y-auto relative'>
         <AdmissionStep step={step} />
       </div>
       <AdmissionRightBar />

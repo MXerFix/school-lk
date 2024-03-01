@@ -172,144 +172,160 @@ const AdmissionStep_1 = () => {
   }
 
   const nextStepHandler = async () => {
-    setLoading(prev => true)
+    setLoading((prev) => true)
     const res = await createDocuments()
     if (res) {
       setTimeout(() => {
         getReqDocumentFn()
-      }, 500);
+      }, 2500)
     }
   }
 
   useEffect(() => {
     if (data?.data.docs && isGetReqDocumentSuccess && !isGetReqDocumentPending) {
       MutateAdmissionStepFn({ status: "success", step_index: 1 })
-      setLoading(prev => false)
+      setLoading((prev) => false)
     }
   }, [MutateAdmissionStepFn, data?.data.docs, isGetReqDocumentPending, isGetReqDocumentSuccess])
 
   return (
-    <div>
-      <h2 className='text-3xl font-medium mb-8 max-2xl:mb-4'>Документы</h2>
-      <div>
-        <p className='max-2xl:text-lg'>
-          На этом этапе Вам необходимо прикрепить документы, перечисленные ниже. Некоторые из них
-          нужно скачать, подписать, и прикрепить.
-        </p>
-        <div className='mt-8 max-2xl:mt-4 flex flex-col items-start justify-start gap-4'>
-          <div className='collapse collapse-plus bg-base-neutral'>
-            <input
-              disabled={activeStep !== 1}
-              type='radio'
-              name='admission-documents-1-accordion'
-              id=''
-            />
-            <div className='collapse-title font-medium max-2xl:text-xl'>Документы ребенка</div>
-            <div className='collapse-content max-2xl:text-lg flex flex-col gap-2'>
-              <FileInputClip
+    <div className='flex flex-col justify-between h-full'>
+      <div className="pb-8">
+        <h2 className='text-3xl font-medium mb-8 max-2xl:mb-4 max-2xl:text-xl'>Документы</h2>
+        <div>
+          <p className='max-2xl:text-base'>
+            На этом этапе Вам необходимо прикрепить документы, перечисленные ниже. Некоторые из них
+            нужно скачать, подписать, и прикрепить.
+          </p>
+          <div className='mt-8 max-2xl:mt-4 flex flex-col items-start justify-start gap-4 max-2xl:gap-2'>
+            <div className='collapse collapse-plus bg-base-neutral'>
+              <input
                 disabled={activeStep !== 1}
-                label='Свидетельство о рождении ребенка'
-                setFile={setChildBirthCertificate}
-                file={childBirthCertificate}
+                type='radio'
+                name='admission-documents-1-accordion'
+                id=''
               />
-              <FileInputClip
-                disabled={activeStep !== 1}
-                label='СНИЛС ребенка'
-                setFile={setChildSnils}
-                file={childSnils}
-              />
+              <div className='collapse-title font-medium max-2xl:text-lg'>Документы ребенка</div>
+              <div className='collapse-content max-2xl:text-sm flex flex-col gap-2 max-2xl:gap-1'>
+                <FileInputClip
+                  disabled={activeStep !== 1}
+                  label={<span>
+                    Свидетельство о рождении ребенка <span className="text-error">*</span>
+                  </span>}
+                  setFile={setChildBirthCertificate}
+                  file={childBirthCertificate}
+                />
+                <FileInputClip
+                  disabled={activeStep !== 1}
+                  label={<span>
+                    СНИЛС ребенка <span className="text-error">*</span>
+                  </span>}
+                  setFile={setChildSnils}
+                  file={childSnils}
+                />
+              </div>
             </div>
-          </div>
-          <div className='collapse collapse-plus bg-base-neutral'>
-            <input
-              disabled={activeStep !== 1}
-              type='radio'
-              name='admission-documents-1-accordion'
-              id=''
-            />
-            <div className='collapse-title font-medium max-2xl:text-xl'>Документы родителя</div>
-            <div className='collapse-content max-2xl:text-lg flex flex-col gap-2'>
-              <FileInputClip
+            <div className='collapse collapse-plus bg-base-neutral'>
+              <input
                 disabled={activeStep !== 1}
-                label='Паспорт родителя (с пропиской*)'
-                setFile={setParentPassport}
-                file={parentPassport}
+                type='radio'
+                name='admission-documents-1-accordion'
+                id=''
               />
-              <FileInputClip
-                disabled={activeStep !== 1}
-                label='СНИЛС родителя'
-                setFile={setParentSnils}
-                file={parentSnils}
-              />
-              <FileInputClip
-                disabled={activeStep !== 1}
-                label='Справка о смене фамилии (при наличии)'
-                setFile={setParentSurnameChangeCertificate}
-                file={parentSurnameChangeCertificate}
-              />
+              <div className='collapse-title font-medium max-2xl:text-lg'>Документы родителя</div>
+              <div className='collapse-content max-2xl:text-lg flex flex-col gap-2 max-2xl:gap-1'>
+                <FileInputClip
+                  disabled={activeStep !== 1}
+                  label={<span>
+                    Паспорт родителя (с пропиской) <span className="text-error">*</span>
+                  </span>}
+                  setFile={setParentPassport}
+                  file={parentPassport}
+                />
+                <FileInputClip
+                  disabled={activeStep !== 1}
+                  label={<span>
+                    СНИЛС родителя <span className="text-error">*</span>
+                  </span>}
+                  setFile={setParentSnils}
+                  file={parentSnils}
+                />
+                <FileInputClip
+                  disabled={activeStep !== 1}
+                  label='Справка о смене фамилии (при наличии)'
+                  setFile={setParentSurnameChangeCertificate}
+                  file={parentSurnameChangeCertificate}
+                />
+              </div>
             </div>
-          </div>
-          <div className='collapse collapse-plus bg-base-neutral'>
-            <input
-              disabled={activeStep !== 1}
-              type='radio'
-              name='admission-documents-1-accordion'
-              id=''
-            />
-            <div className='collapse-title font-medium max-2xl:text-xl'>
-              Дополнительные документы
+            <div className='collapse collapse-plus bg-base-neutral'>
+              <input
+                disabled={activeStep !== 1}
+                type='radio'
+                name='admission-documents-1-accordion'
+                id=''
+              />
+              <div className='collapse-title font-medium max-2xl:text-lg'>
+                Дополнительные документы
+              </div>
+              <div className='collapse-content max-2xl:text-lg flex flex-col gap-2 max-2xl:gap-1'>
+                <FileInputClip
+                  disabled={activeStep !== 1}
+                  label='Справка о статусе многодетной семьи'
+                  setFile={setLargeFamilyCertificate}
+                  file={largeFamilyCertificate}
+                />
+                <FileInputClip
+                  disabled={activeStep !== 1}
+                  label='Справка об инвалидности/ОВЗ ребенка'
+                  setFile={setDisabilityCertificate}
+                  file={disabilityCertificate}
+                />
+                <FileInputClip
+                  disabled={activeStep !== 1}
+                  label='Справка участника СВО'
+                  setFile={setSvoCertificate}
+                  file={svoCertificate}
+                />
+              </div>
             </div>
-            <div className='collapse-content max-2xl:text-lg flex flex-col gap-2'>
-              <FileInputClip
+            <div className='collapse collapse-plus bg-base-neutral'>
+              <input
                 disabled={activeStep !== 1}
-                label='Справка о статусе многодетной семьи'
-                setFile={setLargeFamilyCertificate}
-                file={largeFamilyCertificate}
+                type='radio'
+                name='admission-documents-1-accordion'
+                id=''
               />
-              <FileInputClip
-                disabled={activeStep !== 1}
-                label='Справка об инвалидности/ОВЗ ребенка'
-                setFile={setDisabilityCertificate}
-                file={disabilityCertificate}
-              />
-              <FileInputClip
-                disabled={activeStep !== 1}
-                label='Справка участника СВО'
-                setFile={setSvoCertificate}
-                file={svoCertificate}
-              />
-            </div>
-          </div>
-          <div className='collapse collapse-plus bg-base-neutral'>
-            <input
-              disabled={activeStep !== 1}
-              type='radio'
-              name='admission-documents-1-accordion'
-              id=''
-            />
-            <div className='collapse-title font-medium max-2xl:text-xl'>Согласия</div>
-            <div className='collapse-content max-2xl:text-lg flex flex-col gap-2'>
-              <FileInputClip
-                disabled={activeStep !== 1}
-                downloadLink={`${import.meta.env.VITE_API_URL}/static/downloads/soglasie_na_opd.docx`}
-                file={personalDataAgreement}
-                setFile={setPersonalDataAgreement}
-                label='Согласие на обработку персональных данных'
-              />
-              <FileInputClip
-                disabled={activeStep !== 1}
-                downloadLink={`${import.meta.env.VITE_API_URL}/static/downloads/soglasie_na_diagnostic_test.docx`}
-                file={diagnosticAgreement}
-                setFile={setDiagnosticAgreement}
-                label='Согласие на диагностическое тестирование'
-              />
-              <FileInputClip
-                disabled={activeStep !== 1}
-                downloadLink={`${import.meta.env.VITE_API_URL}/static/downloads/soglasie_na_logoped.docx`}
-                file={psychoAgreement}
-                setFile={setPsychoAgreement}
-                label='Согласие на психолого-логопедическую диагностику'
-              />
+              <div className='collapse-title font-medium max-2xl:text-lg'>Согласия</div>
+              <div className='collapse-content max-2xl:text-lg flex flex-col gap-2 max-2xl:gap-1'>
+                <FileInputClip
+                  disabled={activeStep !== 1}
+                  downloadLink={`${import.meta.env.VITE_API_URL ?? 'http://localhost:7777'}/static/downloads/soglasie_na_opd.docx`}
+                  file={personalDataAgreement}
+                  setFile={setPersonalDataAgreement}
+                  label={<span>
+                    Согласие на обработку персональных данных <span className="text-error">*</span>
+                  </span>}
+                />
+                <FileInputClip
+                  disabled={activeStep !== 1}
+                  downloadLink={`${import.meta.env.VITE_API_URL ?? 'http://localhost:7777'}/static/downloads/soglasie_na_diagnostic_test.docx`}
+                  file={diagnosticAgreement}
+                  setFile={setDiagnosticAgreement}
+                  label={<span>
+                    Согласие на диагностическое тестирование <span className="text-error">*</span>
+                  </span>}
+                />
+                <FileInputClip
+                  disabled={activeStep !== 1}
+                  downloadLink={`${import.meta.env.VITE_API_URL ?? 'http://localhost:7777'}/static/downloads/soglasie_na_logoped.docx`}
+                  file={psychoAgreement}
+                  setFile={setPsychoAgreement}
+                  label={<span>
+                    Согласие на психолого-логопедическую диагностику <span className="text-error">*</span>
+                  </span>}
+                />
+              </div>
             </div>
           </div>
         </div>
