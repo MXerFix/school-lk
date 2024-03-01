@@ -108,7 +108,7 @@ class ParentController {
       })
     } catch (error) {
       next(error)
-      // console.log(error)
+      console.log(error)
     }
   }
 
