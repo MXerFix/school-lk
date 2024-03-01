@@ -164,7 +164,11 @@ class ChildController {
         const oldImg = child.dataValues.img
         const oldImgPath = path.resolve(__dirname, "../../static/img", oldImg)
         if (oldImgPath) {
-          await unlink(oldImgPath)
+          try {
+            await unlink(oldImgPath)
+          } catch (error) {
+            console.log(error)
+          }
         }
       }
 
