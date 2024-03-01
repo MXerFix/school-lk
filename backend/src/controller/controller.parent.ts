@@ -89,7 +89,7 @@ class ParentController {
         user_id: _user.dataValues.id,
         child_id: _child.dataValues.id,
       })
-      console.log(parent)
+      // console.log(parent)
       const parents = await Parent.findAll<Model<ParentType>>({
         where: {
           user_id: _user.dataValues.id,
@@ -108,7 +108,7 @@ class ParentController {
       })
     } catch (error) {
       next(error)
-      console.log(error)
+      // console.log(error)
     }
   }
 
