@@ -28,8 +28,8 @@ const limit = rateLimit({
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(helmet())
-app.use(xss())
+// app.use(helmet())
+// app.use(xss())
 app.use(
   cors({
     credentials: true,
