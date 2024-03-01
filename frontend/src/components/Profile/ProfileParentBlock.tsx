@@ -39,7 +39,7 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
   const [passport_department, setPassportDepartment] = useState("")
   const [passport_issuedBy, setPassportIssuedBy] = useState("")
   const [insurance, setInsurance] = useState(parent?.insurance ?? "")
-  const [email, setEmail] = useState(parent?.email ?? user?.email ?? "")
+  const [email, setEmail] = useState(parent?.email ?? "")
   const [tel, setTel] = useState(parent?.tel ?? "")
   const [snils, setSnils] = useState(parent?.snils ?? "")
 
@@ -113,7 +113,7 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
     setGender(parent?.gender ?? "")
     setCitizenship(parent?.citizenship ?? "")
     setInsurance(parent?.insurance ?? "")
-    setEmail(parent?.email ?? user?.email ?? "")
+    setEmail(parent?.email ?? "")
     setTel(parent?.tel ?? "")
     setSnils(parent?.snils ?? "")
     // if (parent && parent.passport) {
@@ -388,6 +388,7 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
                   setValue={setSurname}
                   type='text'
                   placeholder='Фамилия*'
+                  min={2}
                 />
                 <LabelInput
                   // ref={nameRef}
@@ -397,6 +398,7 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
                   setValue={setName}
                   type='text'
                   placeholder='Имя*'
+                  min={2}
                 />
                 <LabelInput
                   required
@@ -406,6 +408,7 @@ const ProfileParentBlock = ({ parent }: ProfileParentBlockType) => {
                   setValue={setLastname}
                   type='text'
                   placeholder='Отчество (при наличии)'
+                  min={2}
                 />
                 <LabelInput
                   // ref={birthDateRef}

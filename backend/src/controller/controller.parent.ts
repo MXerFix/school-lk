@@ -75,6 +75,17 @@ class ParentController {
       ) {
         return next(ApiError.BadRequest("У ребенка не может быть двух матерей!", []))
       }
+      if (_parents.some((parent) => parent.dataValues.email === parent_data.email)) {
+        throw ApiError.BadRequest("У одного из родителей уже есть такой email!", [])
+      }
+      const _user_email_check = await User.findOne({
+        where: {
+          email: parent_data.email,
+        },
+      })
+      if (_user_email_check) {
+        return next(ApiError.BadRequest("Пользователь с таким email уже существует!", []))
+      }
       const parent = await Parent.create<Model<ParentType>>({
         name: parent_data.name,
         surname: parent_data.surname,
