@@ -4,6 +4,8 @@ import UserController from "../../controller/controller.user"
 import authMiddleware from "src/middleware/middleware.auth"
 import { body } from "express-validator"
 import verifyMiddleware from "src/middleware/middlaware.verified"
+import admin_router from "./router.admin"
+import checkRoleMiddleware from "src/middleware/middleware.check-role"
 
 const router_v1 = Router()
 
@@ -23,5 +25,6 @@ router_v1.get("/refresh", UserController.refresh)
 router_v1.get('/activate', UserController.activate)
 router_v1.post('/activate', UserController.modal_activate)
 router_v1.use("/user", authMiddleware, verifyMiddleware, user_router)
+router_v1.use("/admin", authMiddleware, verifyMiddleware, checkRoleMiddleware('admin'), admin_router)
 
 export default router_v1

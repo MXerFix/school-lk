@@ -13,6 +13,7 @@ export default {
         skeleton: "var(--skeleton-background)",
         'base-neutral': "var(--base-neutral)",
         "button-file": "var(--button-file)",
+        "foreground": "var(--foreground)",
       },
     },
   },

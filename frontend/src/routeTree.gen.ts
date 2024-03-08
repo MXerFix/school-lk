@@ -23,6 +23,10 @@ import { Route as LkMeExplorerImport } from './routes/lk/me-explorer'
 import { Route as LkHomeImport } from './routes/lk/home'
 import { Route as LkAdmissionImport } from './routes/lk/admission'
 import { Route as AdminMainImport } from './routes/admin/main'
+import { Route as AdminListRouteImport } from './routes/admin/list/route'
+import { Route as AdminListUsersImport } from './routes/admin/list/users'
+import { Route as AdminListDocumentsImport } from './routes/admin/list/documents'
+import { Route as AdminListAdmissionsImport } from './routes/admin/list/admissions'
 
 // Create/Update Routes
 
@@ -86,6 +90,26 @@ const AdminMainRoute = AdminMainImport.update({
   getParentRoute: () => AdminRouteRoute,
 } as any)
 
+const AdminListRouteRoute = AdminListRouteImport.update({
+  path: '/list',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+
+const AdminListUsersRoute = AdminListUsersImport.update({
+  path: '/users',
+  getParentRoute: () => AdminListRouteRoute,
+} as any)
+
+const AdminListDocumentsRoute = AdminListDocumentsImport.update({
+  path: '/documents',
+  getParentRoute: () => AdminListRouteRoute,
+} as any)
+
+const AdminListAdmissionsRoute = AdminListAdmissionsImport.update({
+  path: '/admissions',
+  getParentRoute: () => AdminListRouteRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -109,6 +133,10 @@ declare module '@tanstack/react-router' {
     '/registration': {
       preLoaderRoute: typeof RegistrationImport
       parentRoute: typeof rootRoute
+    }
+    '/admin/list': {
+      preLoaderRoute: typeof AdminListRouteImport
+      parentRoute: typeof AdminRouteImport
     }
     '/admin/main': {
       preLoaderRoute: typeof AdminMainImport
@@ -138,6 +166,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LkSectionsImport
       parentRoute: typeof LkRouteImport
     }
+    '/admin/list/admissions': {
+      preLoaderRoute: typeof AdminListAdmissionsImport
+      parentRoute: typeof AdminListRouteImport
+    }
+    '/admin/list/documents': {
+      preLoaderRoute: typeof AdminListDocumentsImport
+      parentRoute: typeof AdminListRouteImport
+    }
+    '/admin/list/users': {
+      preLoaderRoute: typeof AdminListUsersImport
+      parentRoute: typeof AdminListRouteImport
+    }
   }
 }
 
@@ -145,7 +185,14 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   RouteRoute,
-  AdminRouteRoute.addChildren([AdminMainRoute]),
+  AdminRouteRoute.addChildren([
+    AdminListRouteRoute.addChildren([
+      AdminListAdmissionsRoute,
+      AdminListDocumentsRoute,
+      AdminListUsersRoute,
+    ]),
+    AdminMainRoute,
+  ]),
   LkRouteRoute.addChildren([
     LkAdmissionRoute,
     LkHomeRoute,

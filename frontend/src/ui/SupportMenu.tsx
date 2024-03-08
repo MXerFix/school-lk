@@ -18,11 +18,13 @@ const SupportMenu = ({ className }: SupportMenuType) => {
         className='flex items-center justify-center p-2 hover:bg-base-200 w-10 h-10 rounded-md tooltip tooltip-top tooltip-info'
         data-tip='Тема'
       />
-      <button
+      <a
+        href='https://t.me/mxerf_dev'
+        target='_blank'
         className='p-2 hover:bg-base-200 w-10 h-10 rounded-md tooltip tooltip-top tooltip-info'
         data-tip='Помощь'>
         <HelpCircle className='' />
-      </button>
+      </a>
     </div>
   )
 }

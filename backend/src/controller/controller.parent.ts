@@ -78,6 +78,9 @@ class ParentController {
       if (_parents.some((parent) => parent.dataValues.email === parent_data.email)) {
         throw ApiError.BadRequest("У одного из родителей уже есть такой email!", [])
       }
+      if (_parents.some((parent) => parent.dataValues.tel === parent_data.tel)) {
+        throw ApiError.BadRequest("У одного из родителей уже есть такой телефон!", [])
+      }
       const _user_email_check = await User.findOne({
         where: {
           email: parent_data.email,
@@ -85,6 +88,14 @@ class ParentController {
       })
       if (_user_email_check) {
         return next(ApiError.BadRequest("Пользователь с таким email уже существует!", []))
+      }
+      const _user_tel_check = await User.findOne({
+        where: {
+          tel: parent_data.tel,
+        },
+      })
+      if (_user_tel_check) {
+        return next(ApiError.BadRequest("Пользователь с таким телефоном уже существует!", []))
       }
       const parent = await Parent.create<Model<ParentType>>({
         name: parent_data.name,
@@ -158,6 +169,47 @@ class ParentController {
             []
           )
         )
+      }
+      const _parents = await Parent.findAll<Model<ParentType>>({
+        where: {
+          user_id: _user.dataValues.id,
+        },
+      })
+      if (
+        _parents.some((parent) => parent.dataValues.relation_type === "father") &&
+        parent_data.gender === "male" &&
+        _parent.dataValues.gender !== parent_data.gender
+      ) {
+        return next(ApiError.BadRequest("У ребенка не может быть двух отцов!", []))
+      }
+      if (
+        _parents.some((parent) => parent.dataValues.relation_type === "mother") &&
+        parent_data.gender === "female" && 
+        _parent.dataValues.gender !== parent_data.gender
+      ) {
+        return next(ApiError.BadRequest("У ребенка не может быть двух матерей!", []))
+      }
+      if (_parents.some((parent) => (parent.dataValues.email === parent_data.email && _parent.dataValues.email !== parent_data.email))) {
+        throw ApiError.BadRequest("У одного из родителей уже есть такой email!", [])
+      }
+      if (_parents.some((parent) => (parent.dataValues.tel === parent_data.tel && _parent.dataValues.tel !== parent_data.tel))) {
+        throw ApiError.BadRequest("У одного из родителей уже есть такой телефон!", [])
+      }
+      const _user_email_check = await User.findOne({
+        where: {
+          email: parent_data.email,
+        },
+      })
+      if (_user_email_check) {
+        return next(ApiError.BadRequest("Пользователь с таким email уже существует!", []))
+      }
+      const _user_tel_check = await User.findOne({
+        where: {
+          tel: parent_data.tel,
+        },
+      })
+      if (_user_tel_check) {
+        return next(ApiError.BadRequest("Пользователь с таким телефоном уже существует!", []))
       }
       if (parent_data.gender !== _parent.dataValues.gender) {
         _parent.set({

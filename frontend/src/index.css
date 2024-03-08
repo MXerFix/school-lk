@@ -42,6 +42,7 @@
     --skeleton-background: #bebebe;
     --base-neutral: #F2F2FA ;  
     --button-file: #fff;
+    --foreground: #111;
   }
 
   [data-theme="dark"] {
@@ -50,6 +51,7 @@
     --skeleton-background: #31363d;
     --base-neutral: #F2F2FA50 ; 
     --button-file: #F2F2FA50;
+    --foreground: #fff;
   }
 
 }
@@ -96,7 +98,8 @@
 }
 
 .home-content-block-little {
-  @apply col-span-1;
+  height: calc((100vh - (48px * 5)) / 4);
+  @apply col-span-1 ;
 }
 
 .sidebar-menu-item {
@@ -109,6 +112,10 @@
 
 .sidebar-menu-item-wip {
   @apply text-neutral-300 text-start flex items-center justify-start;
+}
+
+.sidebar-menu-item-disabled {
+  @apply hidden
 }
 
 [data-theme="light"] .home-content-block {
@@ -171,3 +178,6 @@
   margin-bottom: 0.25rem;
 }
 
+.content-block-admin-link {
+  @apply col-span-1 h-24 bg-base-100 rounded-lg flex items-center justify-center border border-transparent transition hover:border-base-content
+}

@@ -2,6 +2,7 @@ import e, { NextFunction, Request, Response } from "express"
 import { Model } from "sequelize"
 import { REQUIRED_DOCUMENTS } from "src/consts"
 import Admission from "src/db/models/model.admission"
+import Child from "src/db/models/model.child"
 import Document from "src/db/models/model.document"
 import Exam from "src/db/models/model.exam"
 import Parent from "src/db/models/model.parent"
@@ -24,6 +25,25 @@ class AdmissionController {
         throw ApiError.BadRequest("Абитуриент не найден!", [])
       }
       return res.json({ admission })
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
+
+  async getAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user_dto = req["user"]
+      const admissions = await Admission.findAll({
+        include: {
+          model: User,
+          include: [Child],
+        }
+      })
+      if (!admissions) {
+        throw ApiError.BadRequest("Заявления не найдены!", [])
+      }
+      return res.json({ admissions })
     } catch (error) {
       console.log(error)
       next(error)

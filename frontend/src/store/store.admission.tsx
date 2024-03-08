@@ -29,6 +29,7 @@ export interface AdmissionAPIInterface {
   exams?: unknown[]
 }
 
+
 interface AdmissionStoreInterface {
   admission: AdmissionAPIInterface | null
   setAdmission: (admission: AdmissionAPIInterface | null) => void

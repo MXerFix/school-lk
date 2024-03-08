@@ -7,6 +7,7 @@ import classNames from "classnames"
 import { useChildStore } from "../store/store.child"
 import { useAdmissionStore } from "../store/store.admission"
 import toast from "react-hot-toast"
+import { Transition } from "@headlessui/react"
 
 const SideBar = () => {
   const { user } = useUserStore()
@@ -31,14 +32,14 @@ const SideBar = () => {
         <div className='sidebar-profile-avatar bg-base-200 min-w-20 w-20 h-20 rounded-full flex items-center justify-center overflow-hidden'>
           {user?.profile_img ? (
             <img
-              className="profile-img"
+              className='profile-img'
               src={`${import.meta.env.VITE_API_URL ?? "http://localhost:7777"}/static/img/${user.profile_img}`}
               alt=''
             />
           ) : child?.img ? (
             <img
-              className="profile-img"
-              src={`${import.meta.env.VITE_API_URL ?? 'http://localhost:7777'}/static/img/${child.img}`}
+              className='profile-img'
+              src={`${import.meta.env.VITE_API_URL ?? "http://localhost:7777"}/static/img/${child.img}`}
               alt=''
             />
           ) : (
@@ -49,7 +50,7 @@ const SideBar = () => {
           {" "}
           {/* {user.username.slice(0, 16)}
           {user.username.slice(0, 16) !== user.username && "..."}{" "} */}
-          {user?.username.split('@')[0]}
+          {user?.username.split("@")[0]}
         </p>
       </button>
       <div className='sidebar-menu flex flex-col items-start justify-start gap-2'>
@@ -67,12 +68,13 @@ const SideBar = () => {
           to={activeStep === -1 ? "/lk/profile" : "/lk/admission"}
           onClick={() => activeStep === -1 && toast.error("Заполните анкету ребенка")}
           search={{
-            step: activeStep > -1 ? activeStep : null ,
+            step: activeStep > -1 ? activeStep : null,
           }}
           className={classNames(
-            "sidebar-menu-item",
+            "sidebar-menu-item transition-all",
             // eslint-disable-next-line no-useless-escape
-            pathname === "/lk/admission" && "sidebar-menu-item-active"
+            pathname === "/lk/admission" && "sidebar-menu-item-active",
+            pathname.includes('admin') && 'sidebar-menu-item-disabled'
           )}>
           <ScrollText className={"w-5 h-5"} />
           Приемная кампания
@@ -82,40 +84,58 @@ const SideBar = () => {
           to='/lk/me-explorer'
           className={classNames(
             "sidebar-menu-item sidebar-menu-item-wip",
-            pathname === "/lk/me-explorer" && "sidebar-menu-item-active"
+            pathname === "/lk/me-explorer" && "sidebar-menu-item-active",
+            pathname.includes('admin') && 'sidebar-menu-item-disabled'
           )}
-          data-tip="В разработке...">
+          data-tip='В разработке...'>
           <TestTube2 className='w-5 h-5' />
-          <p className="tooltip tooltip-bottom tooltip-warning" data-tip="В разработке..."> Я-Исследователь </p>
+          <p
+            className='tooltip tooltip-bottom tooltip-warning'
+            data-tip='В разработке...'>
+            {" "}
+            Я-Исследователь{" "}
+          </p>
         </Link>
         <Link
           disabled
           to='/lk/sections'
           className={classNames(
             "sidebar-menu-item sidebar-menu-item-wip",
-            pathname === "/lk/sections" && "sidebar-menu-item-active"
+            pathname === "/lk/sections" && "sidebar-menu-item-active",
+            pathname.includes('admin') && 'sidebar-menu-item-disabled'
           )}
-          data-tip="В разработке...">
+          data-tip='В разработке...'>
           <Palette className='w-5 h-5' />
-          <p className="tooltip tooltip-bottom tooltip-warning" data-tip="В разработке..."> Кружки </p>
+          <p
+            className='tooltip tooltip-bottom tooltip-warning'
+            data-tip='В разработке...'>
+            {" "}
+            Кружки{" "}
+          </p>
         </Link>
         <Link
           disabled
           to='/lk/payment'
           className={classNames(
             "sidebar-menu-item sidebar-menu-item-wip",
-            pathname === "/lk/payment" && "sidebar-menu-item-active"
+            pathname === "/lk/payment" && "sidebar-menu-item-active",
+            pathname.includes('admin') && 'sidebar-menu-item-disabled'
           )}
-          data-tip="В разработке...">
+          data-tip='В разработке...'>
           <Coins className='w-5 h-5' />
-          <p className="tooltip tooltip-bottom tooltip-warning" data-tip="В разработке..."> Оплата </p>
+          <p
+            className='tooltip tooltip-bottom tooltip-warning'
+            data-tip='В разработке...'>
+            {" "}
+            Оплата{" "}
+          </p>
         </Link>
         {user?.role_id && user?.role_id < 3 && (
           <Link
             to='/admin'
             className={classNames(
               "sidebar-menu-item",
-              pathname === "/admin" && "sidebar-menu-item-active"
+              pathname.includes('admin') && "sidebar-menu-item-active"
             )}>
             <Lock className='w-5 h-5' />
             Админ панель
